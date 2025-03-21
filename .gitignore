@@ -1,0 +1,40 @@
+# Node.js (ignora dependências instaladas)
+node_modules/
+npm-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Editor/IDE (ignora arquivos de configuração do VSCode, JetBrains, etc.)
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# Prisma (arquivos desnecessários)
+prisma/migrations/
+prisma/dev.db
+
+# Cache
+.cache/
+.npm/
+.pnpm/
+.yarn/
+
+# PostgreSQL (arquivos temporários do banco)
+*.pgsql
+*.pgdata
+dump.sql
