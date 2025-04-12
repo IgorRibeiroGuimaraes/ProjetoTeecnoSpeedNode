@@ -3,6 +3,7 @@ import swagger from "@fastify/swagger";
 import swaggerUI from "@fastify/swagger-ui";
 import dotenv from "dotenv";
 import { createVanLetterRoute } from "./routes/createVanLetter";
+import { getProductsRoute } from "./routes/getProducts";
 
 dotenv.config(); // Carrega as variáveis de ambiente do .env
 
@@ -31,6 +32,8 @@ app.register(swaggerUI, {
 
 // Registra a rota de criação de Carta VAN
 app.register(createVanLetterRoute);
+
+app.register(getProductsRoute)
 
 // Tratamento de erros global
 app.setErrorHandler((error, request, reply) => {
