@@ -1,6 +1,6 @@
 import { FastifyInstance } from 'fastify';
 import { loginController, refreshTokenController } from '../controllers/authController';
-import { loginSchema,refreshTokenSchema } from '../schemas/auth/AuthSchema';
+import { loginSchema,refreshTokenSchema } from '../schemas/auth/authSchema';
 
 /**
  * Registra as rotas de autenticação.
