@@ -22,13 +22,17 @@ export async function buscarStatusAberta() {
 }
 
 /**
- * Verifica o número de cartas abertas.
+ * Verifica o número de vezes que uma carta específica está com o status "aberta".
+ * @param cartaId ID da carta.
  * @param statusId ID do status "aberta".
- * @returns O número de cartas abertas.
+ * @returns O número de vezes que a carta está com o status "aberta".
  */
-export async function contarCartasAbertas(statusId: number) {
+export async function contarCartasAbertasPorCarta(cartaId: number, statusId: number) {
   return prisma.cartaStatus.count({
-    where: { statusId },
+    where: {
+      cartaId,
+      statusId,
+    },
   });
 }
 

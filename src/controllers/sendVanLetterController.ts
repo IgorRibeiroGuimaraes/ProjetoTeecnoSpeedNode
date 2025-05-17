@@ -2,7 +2,7 @@ import { FastifyReply, FastifyRequest } from 'fastify';
 import {
   verificarCarta,
   buscarStatusAberta,
-  contarCartasAbertas,
+  contarCartasAbertasPorCarta,
   associarStatusAberta,
 } from '../services/sendVanLetterService';
 
@@ -29,16 +29,16 @@ export async function sendVanLetterController(
       return rep.status(500).send({ erro: 'Status "aberta" não encontrado no sistema.' });
     }
 
-    // 3. Verificar o número de cartas abertas
-    const cartasAbertas = await contarCartasAbertas(statusAberta.id);
+    // 3. Verificar o número de vezes que a carta está com o status "aberta"
+    const cartasAbertas = await contarCartasAbertasPorCarta(cartaId, statusAberta.id);
     if (cartasAbertas >= 5) {
       return rep.status(400).send({
-        erro: 'Limite de 5 cartas abertas atingido. Aguarde a finalização de uma carta antes de enviar outra.',
+        erro: 'Limite de 5 validações atingido para esta carta. Aguarde antes de tentar novamente.',
       });
     }
 
     // 4. Associar o status "aberta" à carta existente
-    await associarStatusAberta(carta.id, statusAberta.id);
+    await associarStatusAberta(cartaId, statusAberta.id);
 
     return rep.status(201).send({
       mensagem: 'Carta enviada com sucesso.',
