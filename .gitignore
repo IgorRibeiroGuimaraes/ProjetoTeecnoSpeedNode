@@ -38,3 +38,6 @@ prisma/dev.db
 *.pgsql
 *.pgdata
 dump.sql
+
+
+*.env
