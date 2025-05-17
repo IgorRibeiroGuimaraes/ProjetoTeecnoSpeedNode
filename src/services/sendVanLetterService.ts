@@ -1,0 +1,47 @@
+import { prisma } from '../lib/prisma';
+
+/**
+ * Verifica se a carta existe no banco de dados.
+ * @param cartaId ID da carta.
+ * @returns A carta encontrada ou null.
+ */
+export async function verificarCarta(cartaId: number) {
+  return prisma.cartaVan.findUnique({
+    where: { id: cartaId },
+  });
+}
+
+/**
+ * Busca o ID do status "aberta".
+ * @returns O status "aberta" ou null.
+ */
+export async function buscarStatusAberta() {
+  return prisma.statusCarta.findUnique({
+    where: { descricao: 'Aberta' },
+  });
+}
+
+/**
+ * Verifica o número de cartas abertas.
+ * @param statusId ID do status "aberta".
+ * @returns O número de cartas abertas.
+ */
+export async function contarCartasAbertas(statusId: number) {
+  return prisma.cartaStatus.count({
+    where: { statusId },
+  });
+}
+
+/**
+ * Associa o status "aberta" a uma carta existente.
+ * @param cartaId ID da carta.
+ * @param statusId ID do status "aberta".
+ */
+export async function associarStatusAberta(cartaId: number, statusId: number) {
+  return prisma.cartaStatus.create({
+    data: {
+      cartaId,
+      statusId,
+    },
+  });
+}

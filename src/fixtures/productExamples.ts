@@ -1,35 +1,28 @@
 /**
- * Exemplo de uma requisição para buscar um produto pelo ID.
- * Este exemplo pode ser usado em testes ou na documentação da API.
+ * Exemplo de resposta de sucesso para a lista de produtos por banco.
  */
-export const productRequestExample = {
-  id: 1, // ID do produto a ser buscado
+export const getProductsSuccessExample = {
+  bancoId: 1,
+  nomeBanco: 'Banco do Brasil S.A.',
+  produtosDisponiveis: [
+    { id: 101, nome: 'Produto A', descricao: 'Descrição do Produto A' },
+    { id: 102, nome: 'Produto B', descricao: 'Descrição do Produto B' },
+    { id: 103, nome: 'Produto C', descricao: 'Descrição do Produto C' },
+  ],
 };
 
 /**
- * Exemplo de uma resposta bem-sucedida para a rota /produto/:id.
- * Este exemplo pode ser usado em testes ou na documentação da API.
+ * Exemplo de erro 404: Banco não encontrado ou sem produtos disponíveis.
  */
-export const productResponseExample = {
-  id: 1,
-  nome: 'Boletos', // Nome do produto
-  descricao: 'Trafegar arquivos de remessa e retorno de boletos', // Descrição do produto
+export const getProductsNotFoundExample = {
+  erro: 'Banco não encontrado',
+  detalhe: 'Nenhum banco foi encontrado com o ID fornecido ou não há produtos disponíveis.',
 };
 
 /**
- * Exemplo de uma resposta de erro 404 para a rota /produto/:id.
- * Este exemplo pode ser usado em testes ou na documentação da API.
+ * Exemplo de erro 500: Erro interno do servidor.
  */
-export const productNotFoundExample = {
-  erro: 'Produto não encontrado', // Mensagem geral de erro
-  detalhe: 'Nenhum produto com o ID 99 foi encontrado.', // Detalhe do erro
-};
-
-/**
- * Exemplo de uma resposta de erro 500 para a rota /produto/:id.
- * Este exemplo pode ser usado em testes ou na documentação da API.
- */
-export const productInternalErrorExample = {
-  erro: 'Erro ao buscar o produto', // Mensagem geral de erro
-  detalhe: 'Erro inesperado ao processar a requisição', // Detalhe do erro interno
+export const getProductsInternalErrorExample = {
+  erro: 'Erro interno do servidor',
+  detalhe: 'Erro inesperado ao processar a requisição.',
 };

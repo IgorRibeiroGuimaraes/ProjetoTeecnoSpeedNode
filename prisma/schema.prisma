@@ -79,7 +79,7 @@ model CartaVan {
   telefone         String   @db.VarChar(15)
   email            String
   bancoId          Int
-  tipoCnabId       Int // Relaciona com o TipoCnab
+  tipoCnabId       Int
   agencia          String
   agenciaDV        String?
   conta            Int
@@ -90,6 +90,33 @@ model CartaVan {
   emailGerente     String
   createdAt        DateTime @default(now())
 
-  banco    Banco    @relation(fields: [bancoId], references: [id], onDelete: Cascade)
-  tipoCnab TipoCnab @relation(fields: [tipoCnabId], references: [id], onDelete: Cascade)
+  banco    Banco        @relation(fields: [bancoId], references: [id], onDelete: Cascade)
+  tipoCnab TipoCnab     @relation(fields: [tipoCnabId], references: [id], onDelete: Cascade)
+  status   CartaStatus[] // Relação com a tabela intermediária de status
+}
+
+model CartaStatus {
+  id        Int      @id @default(autoincrement())
+  cartaId   Int      // Relaciona com a tabela CartaVan
+  statusId  Int      // Relaciona com a tabela StatusCarta
+  createdAt DateTime @default(now())
+
+  carta     CartaVan     @relation(fields: [cartaId], references: [id], onDelete: Cascade)
+  status    StatusCarta  @relation(fields: [statusId], references: [id], onDelete: Restrict)
+}
+
+model StatusCarta {
+  id          Int      @id @default(autoincrement())
+  descricao   String   @unique @db.VarChar(50) // Nome do status (ex.: aberta, finalizada)
+  cartaStatus CartaStatus[]
+}
+
+
+model Empresa {
+  id        Int      @id @default(autoincrement())
+  cnpj      String   @unique @db.VarChar(14) // CNPJ único
+  nome      String   @db.VarChar(255) // Nome da empresa
+  senha     String   @db.Text // Senha da empresa
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }

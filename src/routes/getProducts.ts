@@ -1,6 +1,6 @@
 import { FastifyInstance } from 'fastify';
 import { getProductsHandler } from '../controllers/getProductsController';
-import { getProductsSchema } from '../schemas/van/Product/getProductsSchema';
+import { getProductsSchema } from '../schemas/product/getProductsSchema';
 
 /**
  * Registra a rota para obter os produtos disponíveis para um banco específico.
