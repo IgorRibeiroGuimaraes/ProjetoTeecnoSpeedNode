@@ -9,6 +9,9 @@ import { updateVanLetterRoute } from "./routes/updateVanLetter";
 import { getBankListRoutes } from "./routes/getBankList";
 import { authRoutes } from "./routes/authRoutes"; 
 import { sendVanLetterRoutes } from "./routes/sendVanLetter";
+import { generateVanLetterPDFRoute } from "./routes/generateVanLetterPDF";
+import { updateCartaServicoRoute } from "./routes/updateCartaServico";
+import { getServiceRoute } from "./routes/getService";
 
 dotenv.config(); // Carrega as variáveis de ambiente do .env
 
@@ -50,13 +53,16 @@ app.register(createVanLetterRoute);
 app.register(getProductsRoute);
 app.register(updateVanLetterRoute);
 app.register(getBankListRoutes);
-app.register(authRoutes); // Registra as rotas de autenticação
+app.register(authRoutes);
 app.register(sendVanLetterRoutes)
+app.register(generateVanLetterPDFRoute)
+app.register(updateCartaServicoRoute)
+app.register(getServiceRoute)
 
 // Tratamento de erros global
-app.setErrorHandler((error, request, reply) => {
+app.setErrorHandler((error, req, rep) => {
   console.error("Erro:", error);
-  reply.status(500).send({ error: "Erro interno do servidor" });
+  rep.status(500).send({ error: "Erro interno do servidor" });
 });
 
 // Inicia o servidor

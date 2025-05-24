@@ -1,0 +1,83 @@
+body {
+  font-family: Arial, sans-serif;
+  margin: 40px;
+  line-height: 1.5;
+}
+h1 {
+  text-align: center;
+  font-size: 16px;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+.header {
+  border: 1px solid black;
+  text-align: center;
+  margin-bottom: 10px;
+}
+.header .logo {
+  font-size: 14px;
+  font-weight: bold;
+  padding: 2px 0;
+}
+.header .company-name {
+  font-size: 14px;
+  padding: 2px 0;
+  border-bottom: 1px solid black;
+}
+.header .circular {
+  font-size: 12px;
+  font-weight: bold;
+  padding: 5px 0;
+}
+.bank-details {
+  margin-top: 10px;
+  display: flex;
+  justify-content: space-between;
+  font-size: 12px;
+}
+.bank-details .left,
+.bank-details .right {
+  width: 48%;
+}
+.bank-details p {
+  margin: 0;
+  line-height: 1.2;
+}
+.bank-details p span {
+  font-weight: bold;
+}
+.manager-details {
+  margin-top: 20px;
+  font-size: 12px;
+}
+.manager-details p {
+  margin: 5px 0;
+}
+.manager-details p span {
+  font-weight: bold;
+}
+.contact-preference {
+  margin-top: 10px;
+  font-size: 12px;
+}
+.content {
+  font-size: 12px;
+}
+.content p.indentado {
+  text-indent: 2em;
+}
+.subject {
+  font-size: 14px;
+  margin-top: 20px;
+  font-weight: bold;
+}
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12px;
+}
+table th, table td {
+  border: 1px solid black;
+  padding: 5px;
+  text-align: center;
+}

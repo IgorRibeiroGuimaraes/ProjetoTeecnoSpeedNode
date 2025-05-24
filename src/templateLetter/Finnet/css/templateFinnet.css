@@ -1,0 +1,42 @@
+body {
+  font-family: Arial, sans-serif;
+  margin: 10px; /* Reduzir margens */
+  line-height: 1.2; /* Reduzir espaçamento entre linhas */
+  font-size: 10px; /* Reduzir tamanho da fonte */
+}
+
+.container {
+  padding: 5px; /* Reduzir o padding */
+  max-width: 800px;
+  margin: auto;
+}
+
+.section-title {
+  font-weight: bold;
+  margin-top: 10px; /* Reduzir espaçamento entre seções */
+  font-size: 11px; /* Reduzir tamanho da fonte */
+}
+
+.option {
+  margin-left: 5px; /* Reduzir indentação */
+}
+
+.signature {
+  margin-top: 20px; /* Reduzir espaçamento antes da assinatura */
+  text-align: right;
+}
+
+.footer {
+  margin-top: 10px; /* Reduzir espaçamento antes do rodapé */
+  text-align: center;
+  font-weight: bold;
+}
+
+.contact-block {
+  margin-bottom: 10px; /* Reduzir espaçamento entre blocos de contato */
+}
+
+.field {
+  margin-left: 5px; /* Reduzir indentação */
+  font-size: 10px; /* Reduzir tamanho da fonte */
+}
