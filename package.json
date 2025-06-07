@@ -1,10 +1,12 @@
 {
   "name": "projeto-tecno",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "description": "Projeto TecnoSpeed hospedado no Render",
+  "main": "dist/server.js",
   "scripts": {
-    "dev": "tsx watch src/server.ts"
+    "dev": "tsx watch src/server.ts",
+    "build": "tsc",
+    "start": "node dist/server.js"
   },
   "keywords": [],
   "author": "",
@@ -20,9 +22,6 @@
     "jsonwebtoken": "^9.0.2",
     "luxon": "^3.6.1",
     "pg": "^8.13.3",
-    "projeto-tecno": "file:",
-    "Projeto-Tecno": "file:",
-    "ProjetoTecno": "file:",
     "puppeteer": "^24.9.0",
     "zod": "^3.24.2",
     "zod-to-json-schema": "^3.24.5"
