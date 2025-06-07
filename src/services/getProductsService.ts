@@ -1,4 +1,5 @@
 import { prisma } from '../lib/prisma';
+import { Produto } from '@prisma/client'; // Importa o tipo Produto gerado pelo Prisma
 
 /**
  * Serviço para obter o nome do banco e os produtos disponíveis para um banco específico.
@@ -7,7 +8,6 @@ import { prisma } from '../lib/prisma';
  * @returns Nome do banco e lista de produtos disponíveis.
  */
 export async function getProductsByBancoId(bancoId: number) {
-
   try {
     // Busca o banco e os produtos associados no banco de dados
     const banco = await prisma.banco.findUnique({
@@ -35,7 +35,7 @@ export async function getProductsByBancoId(bancoId: number) {
     }
 
     // Mapeia os produtos para o formato esperado
-    const produtosDisponiveis = banco.produtos.map((relacao) => relacao.produto);
+    const produtosDisponiveis = banco.produtos.map((relacao: { produto: Produto }) => relacao.produto);
 
     return {
       bancoId: banco.id,
