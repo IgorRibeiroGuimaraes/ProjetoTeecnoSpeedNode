@@ -1,5 +1,6 @@
 import { FastifyRequest, FastifyReply } from 'fastify';
 import { getProductsByBancoId } from '../services/getProductsService';
+import { Produto } from '@prisma/client'; // Importa o tipo Produto gerado pelo Prisma
 
 /**
  * Controller para obter os produtos disponíveis para um banco específico.
@@ -35,7 +36,7 @@ export async function getProductsHandler(req: FastifyRequest, rep: FastifyReply)
     const resposta = {
       bancoId: banco.bancoId,
       nomeBanco: banco.nomeBanco,
-      produtosDisponiveis: banco.produtosDisponiveis.map((produto) => ({
+      produtosDisponiveis: banco.produtosDisponiveis.map((produto: Produto) => ({
         id: produto.id,
         nome: produto.nome,
         descricao: produto.descricao,
