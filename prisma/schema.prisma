@@ -9,47 +9,38 @@ datasource db {
 }
 
 model Banco {
-  id         Int                @id @default(autoincrement())
-  nome       String             @db.VarChar(255)
-  cnabs      BancosCnabs[]
-  produtos   BancosProdutos[]
-  cartasVan  CartaVan[]
+  id                Int                @id @default(autoincrement())
+  nome              String             @db.VarChar(255)
+  configuracoes      BancoConfiguracoes[]
+  cartasVan         CartaVan[]
 }
 
 model TipoCnab {
   id          Int           @id @default(autoincrement())
   descricao   String        @unique @db.VarChar(100) // Nome do tipo de CNAB (ex.: CNAB240, CNAB400)
-  bancosCnabs BancosCnabs[]
-  cartasVan   CartaVan[] // Relação inversa com CartaVan
-}
+  configuracoes BancoConfiguracoes[]
 
-model BancosCnabs {
-  id      Int @id @default(autoincrement())
-  bancoId Int
-  cnabId  Int
-
-  banco    Banco    @relation(fields: [bancoId], references: [id], onDelete: Cascade)
-  tipoCnab TipoCnab @relation(fields: [cnabId], references: [id], onDelete: Cascade)
-
-  @@unique([bancoId, cnabId]) // Garante que não haja duplicidade na relação entre banco e CNAB
+  CartaVan CartaVan[]
 }
 
 model Produto {
-  id        Int              @id @default(autoincrement())
-  nome      String           @db.VarChar(255) // Nome do produto
-  descricao String           @unique @db.VarChar(255)
-  bancos    BancosProdutos[]
+  id          Int           @id @default(autoincrement())
+  nome        String        @db.VarChar(255) // Nome do produto
+  descricao   String        @unique @db.VarChar(255)
+  configuracoes BancoConfiguracoes[]
 }
 
-model BancosProdutos {
-  id        Int @id @default(autoincrement())
+model BancoConfiguracoes {
+  id        Int      @id @default(autoincrement())
   bancoId   Int
-  produtoId Int
+  produtoId Int?
+  cnabId    Int?
 
-  banco   Banco   @relation(fields: [bancoId], references: [id], onDelete: Cascade)
-  produto Produto @relation(fields: [produtoId], references: [id], onDelete: Cascade)
+  banco     Banco     @relation(fields: [bancoId], references: [id], onDelete: Cascade)
+  produto   Produto?  @relation(fields: [produtoId], references: [id], onDelete: Cascade)
+  tipoCnab  TipoCnab? @relation(fields: [cnabId], references: [id], onDelete: Cascade)
 
-  @@unique([bancoId, produtoId])
+  @@unique([bancoId, produtoId, cnabId]) // Garante que não haja duplicidade na relação
 }
 
 model CartaVan {
@@ -94,7 +85,6 @@ model StatusCarta {
   descricao   String   @unique @db.VarChar(50) // Nome do status (ex.: aberta, finalizada)
   cartaStatus CartaStatus[]
 }
-
 
 model Empresa {
   id        Int      @id @default(autoincrement())

@@ -9,14 +9,14 @@ const swagger_ui_1 = __importDefault(require("@fastify/swagger-ui"));
 const cookie_1 = __importDefault(require("@fastify/cookie"));
 const dotenv_1 = __importDefault(require("dotenv"));
 const createVanLetter_1 = require("./routes/createVanLetter");
-const getProducts_1 = require("./routes/getProducts");
 const updateVanLetter_1 = require("./routes/updateVanLetter");
-const getBankList_1 = require("./routes/getBankList");
 const authRoutes_1 = require("./routes/authRoutes");
 const sendVanLetter_1 = require("./routes/sendVanLetter");
 const generateVanLetterPDF_1 = require("./routes/generateVanLetterPDF");
 const updateCartaServico_1 = require("./routes/updateCartaServico");
 const getService_1 = require("./routes/getService");
+const bancoConfiguracoesRoutes_1 = require("./routes/bancoConfiguracoesRoutes");
+const cors_1 = __importDefault(require("@fastify/cors"));
 dotenv_1.default.config(); // Carrega as variáveis de ambiente do .env
 const app = (0, fastify_1.default)({
     ajv: {
@@ -47,16 +47,21 @@ app.register(swagger_1.default, {
 app.register(swagger_ui_1.default, {
     routePrefix: "/docs",
 });
+app.register(cors_1.default, {
+    origin: process.env.WEB_BASE_URL || "*", // Puxa a URL do front-end do .env ou permite todas as origens como fallback
+    methods: ["GET", "POST", "PUT", "DELETE"], // Métodos permitidos
+    allowedHeaders: ["Content-Type", "Authorization"], // Cabeçalhos permitidos
+    credentials: true, // Permite cookies e cabeçalhos de autenticação
+});
 // Registra as rotas
 app.register(createVanLetter_1.createVanLetterRoute);
-app.register(getProducts_1.getProductsRoute);
 app.register(updateVanLetter_1.updateVanLetterRoute);
-app.register(getBankList_1.getBankListRoutes);
 app.register(authRoutes_1.authRoutes);
 app.register(sendVanLetter_1.sendVanLetterRoutes);
 app.register(generateVanLetterPDF_1.generateVanLetterPDFRoute);
 app.register(updateCartaServico_1.updateCartaServicoRoute);
 app.register(getService_1.getServiceRoute);
+app.register(bancoConfiguracoesRoutes_1.bancoConfiguracoesRoutes);
 // Tratamento de erros global
 app.setErrorHandler((error, req, rep) => {
     console.error("Erro:", error);

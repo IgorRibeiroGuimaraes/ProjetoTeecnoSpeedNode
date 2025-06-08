@@ -4,14 +4,14 @@ import swaggerUI from "@fastify/swagger-ui";
 import cookie from "@fastify/cookie"; 
 import dotenv from "dotenv";
 import { createVanLetterRoute } from "./routes/createVanLetter";
-import { getProductsRoute } from "./routes/getProducts";
 import { updateVanLetterRoute } from "./routes/updateVanLetter";
-import { getBankListRoutes } from "./routes/getBankList";
 import { authRoutes } from "./routes/authRoutes"; 
 import { sendVanLetterRoutes } from "./routes/sendVanLetter";
 import { generateVanLetterPDFRoute } from "./routes/generateVanLetterPDF";
 import { updateCartaServicoRoute } from "./routes/updateCartaServico";
 import { getServiceRoute } from "./routes/getService";
+import { bancoConfiguracoesRoutes } from "./routes/bancoConfiguracoesRoutes";
+import cors from "@fastify/cors";
 
 dotenv.config(); // Carrega as variáveis de ambiente do .env
 
@@ -48,16 +48,22 @@ app.register(swaggerUI, {
   routePrefix: "/docs",
 });
 
+app.register(cors, {
+  origin: process.env.WEB_BASE_URL || "*", // Puxa a URL do front-end do .env ou permite todas as origens como fallback
+  methods: ["GET", "POST", "PUT", "DELETE"], // Métodos permitidos
+  allowedHeaders: ["Content-Type", "Authorization"], // Cabeçalhos permitidos
+  credentials: true, // Permite cookies e cabeçalhos de autenticação
+});
+
 // Registra as rotas
 app.register(createVanLetterRoute);
-app.register(getProductsRoute);
 app.register(updateVanLetterRoute);
-app.register(getBankListRoutes);
 app.register(authRoutes);
 app.register(sendVanLetterRoutes)
 app.register(generateVanLetterPDFRoute)
 app.register(updateCartaServicoRoute)
 app.register(getServiceRoute)
+app.register(bancoConfiguracoesRoutes)
 
 // Tratamento de erros global
 app.setErrorHandler((error, req, rep) => {

@@ -1,7 +1,7 @@
 export const loginSchema = {
   tags: ['Autenticação'],
   summary: 'Realizar login',
-  description: 'Autentica o usuário e retorna um Access Token e Refresh Token.',
+  description: 'Autentica o usuário e retorna um Access Token.',
   body: {
     type: 'object',
     properties: {
@@ -21,29 +21,6 @@ export const loginSchema = {
     },
     400: {
       description: 'Erro de validação.',
-      type: 'object',
-      properties: {
-        erro: { type: 'string' },
-      },
-    },
-  },
-};
-
-export const refreshTokenSchema = {
-  tags: ['Autenticação'],
-  summary: 'Renovar Access Token',
-  description: 'Renova o Access Token usando o Refresh Token.',
-  response: {
-    200: {
-      description: 'Token renovado com sucesso.',
-      type: 'object',
-      properties: {
-        mensagem: { type: 'string' },
-        token: { type: 'string', description: 'Novo Access Token' },
-      },
-    },
-    401: {
-      description: 'Refresh Token inválido ou não fornecido.',
       type: 'object',
       properties: {
         erro: { type: 'string' },

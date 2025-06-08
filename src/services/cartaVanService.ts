@@ -4,10 +4,7 @@ import { formatPhone } from '../utils/formatPhone';
 
 /**
  * Serviço para criar uma Carta VAN no banco de dados.
- * Este serviço é responsável por:
- * 1. Processar os dados recebidos da requisição.
- * 2. Inserir os dados no banco de dados utilizando o Prisma.
- * 3. Retornar os dados no formato esperado pelo esquema de resposta.
+ * Este serviço valida se o banco suporta o CNAB especificado antes de criar a carta.
  *
  * @param data - Dados recebidos da requisição para criar a Carta VAN.
  * @returns Objeto contendo os dados da Carta VAN no formato esperado.
@@ -15,6 +12,22 @@ import { formatPhone } from '../utils/formatPhone';
 export async function createCartaVan(data: any) {
   // Obtém a data e hora atual em UTC
   const nowInUTC = DateTime.utc().toJSDate();
+
+  // Valida se o banco e o CNAB estão relacionados na tabela BancoConfiguracoes
+  const configuracaoValida = await prisma.bancoConfiguracoes.findFirst({
+    where: {
+      bancoId: data.banco.bancoId,
+      tipoCnab: {
+        id: data.banco.tipoCnabId, // Usa o relacionamento tipoCnab para validar o ID
+      },
+    },
+  });
+
+  if (!configuracaoValida) {
+    throw new Error(
+      `O banco com ID ${data.banco.bancoId} não suporta o CNAB com ID ${data.banco.tipoCnabId}.`
+    );
+  }
 
   // Cria a Carta VAN no banco de dados
   const vanLetter = await prisma.cartaVan.create({
@@ -39,6 +52,7 @@ export async function createCartaVan(data: any) {
     },
     include: {
       tipoCnab: true, // Inclui os detalhes do tipo de CNAB na resposta
+      banco: true, // Inclui os detalhes do banco na resposta
     },
   });
 
@@ -55,7 +69,7 @@ export async function createCartaVan(data: any) {
       email: vanLetter.email, // E-mail do responsável
     },
     banco: {
-      bancoId: vanLetter.bancoId, // ID do banco
+      nome: vanLetter.banco.nome, // Nome do banco
       agencia: vanLetter.agencia, // Agência do banco
       agenciaDV: vanLetter.agenciaDV, // Dígito verificador da agência
       conta: vanLetter.conta, // Número da conta

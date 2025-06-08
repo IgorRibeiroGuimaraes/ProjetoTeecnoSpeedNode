@@ -1,7 +1,14 @@
 import { prisma } from '../lib/prisma';
-import { gerarTokenJWT, gerarRefreshToken, validarRefreshToken } from '../utils/jwtUtils';
+import { gerarTokenJWT } from '../utils/jwtUtils';
 
-export async function autenticarUsuario(cnpj: string, senha: string): Promise<{ accessToken: string; refreshToken: string }> {
+/**
+ * Serviço para autenticar o usuário.
+ *
+ * @param cnpj - CNPJ da empresa.
+ * @param senha - Senha da empresa.
+ * @returns Objeto contendo o Access Token.
+ */
+export async function autenticarUsuario(cnpj: string, senha: string): Promise<{ accessToken: string }> {
   // Busca a empresa pelo CNPJ
   const empresa = await prisma.empresa.findUnique({ where: { cnpj } });
   if (!empresa) {
@@ -13,23 +20,8 @@ export async function autenticarUsuario(cnpj: string, senha: string): Promise<{ 
     throw new Error('Senha inválida para o CNPJ fornecido.');
   }
 
-  // Gera os tokens
+  // Gera o Access Token
   const accessToken = gerarTokenJWT({ cnpj: empresa.cnpj, id: empresa.id });
-  const refreshToken = gerarRefreshToken({ cnpj: empresa.cnpj, id: empresa.id });
 
-  return { accessToken, refreshToken };
-}
-
-export async function renovarAccessToken(refreshToken: string): Promise<string> {
-  try {
-    // Valida o Refresh Token
-    const payload = validarRefreshToken(refreshToken);
-
-    // Gera um novo Access Token
-    const newAccessToken = gerarTokenJWT({ cnpj: payload.cnpj, id: payload.id });
-
-    return newAccessToken;
-  } catch (error) {
-    throw new Error('Refresh Token inválido ou expirado.');
-  }
+  return { accessToken };
 }

@@ -1,7 +1,6 @@
 import { FastifyReply, FastifyRequest } from 'fastify';
-import { autenticarUsuario, renovarAccessToken } from '../services/authService';
+import { autenticarUsuario } from '../services/authService';
 import { definirCookie } from '../utils/cookieUtils';
-import { tratarErroInterno } from '../utils/errorHandler';
 
 /**
  * Controller para autenticar um usuário.
@@ -13,59 +12,35 @@ import { tratarErroInterno } from '../utils/errorHandler';
 export async function loginController(req: FastifyRequest, rep: FastifyReply) {
   const { cnpj, senha } = req.body as { cnpj: string; senha: string };
 
-  // Valida se os campos obrigatórios foram fornecidos
   if (!cnpj || !senha) {
     return rep.status(400).send({ erro: 'CNPJ e senha são obrigatórios.' });
   }
 
   try {
-    // Chama o serviço para autenticar o usuário
-    const { accessToken, refreshToken } = await autenticarUsuario(cnpj, senha);
+    const { accessToken } = await autenticarUsuario(cnpj, senha);
 
-    // Define os cookies para Access Token e Refresh Token
-    definirCookie(rep, 'authToken', accessToken, 3600); // 1 hora
-    definirCookie(rep, 'refreshToken', refreshToken, 7 * 24 * 60 * 60); // 7 dias
+    definirCookie(rep, 'authToken', accessToken, 3600); // Define o cookie com o token
 
-    // Retorna a resposta de sucesso
-    return rep.status(200).send({
-      mensagem: 'Autenticação bem-sucedida.',
-      token: accessToken,
-    });
+    return rep.status(200).send({ mensagem: 'Autenticação bem-sucedida.', token: accessToken });
   } catch (error) {
-    // Trata erros internos
-    return tratarErroInterno(rep, error);
+    return rep.status(500).send({ erro: 'Erro interno ao autenticar o usuário.' });
   }
 }
 
 /**
- * Controller para renovar o token de acesso.
+ * Controller para realizar logout.
+ *
+ * Remove os cookies de autenticação e encerra a sessão do usuário.
  *
  * @param req - Objeto da requisição HTTP.
  * @param rep - Objeto da resposta HTTP.
- * @returns Retorna um novo token de acesso e redefine o cookie de autenticação.
  */
-export async function refreshTokenController(req: FastifyRequest, rep: FastifyReply) {
-  const refreshToken = req.cookies.refreshToken;
-
-  // Valida se o refresh token foi fornecido
-  if (!refreshToken) {
-    return rep.status(401).send({ erro: 'Refresh token não fornecido.' });
-  }
-
+export async function logoutController(req: FastifyRequest, rep: FastifyReply) {
   try {
-    // Chama o serviço para renovar o token de acesso
-    const newAccessToken = await renovarAccessToken(refreshToken);
+    rep.clearCookie('authToken'); // Remove o cookie de autenticação
 
-    // Define o novo Access Token no cookie
-    definirCookie(rep, 'authToken', newAccessToken, 3600); // 1 hora
-
-    // Retorna a resposta de sucesso
-    return rep.status(200).send({
-      mensagem: 'Token renovado com sucesso.',
-      token: newAccessToken,
-    });
+    return rep.status(200).send({ mensagem: 'Logout realizado com sucesso.' });
   } catch (error) {
-    // Trata erros internos
-    return tratarErroInterno(rep, error);
+    return rep.status(500).send({ erro: 'Erro ao realizar logout.' });
   }
 }
