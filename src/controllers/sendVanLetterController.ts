@@ -1,4 +1,5 @@
 import { FastifyReply, FastifyRequest } from 'fastify';
+import { SendVanLetterBody } from '../schemas/van/letter/sendVanLetterSchema';
 import {
   verificarCarta,
   buscarStatusAberta,
@@ -6,12 +7,8 @@ import {
   associarStatusAberta,
 } from '../services/sendVanLetterService';
 
-interface SendVanLetterBody {
-  cartaId: number; // ID da carta já criada
-}
-
 export async function sendVanLetterController(
-  req: FastifyRequest<{ Body: SendVanLetterBody }>,
+  req: FastifyRequest<{ Body: SendVanLetterBody }>, // Define o tipo do corpo da requisição
   rep: FastifyReply
 ) {
   const { cartaId } = req.body;

@@ -1,3 +1,5 @@
+import { FromSchema } from 'json-schema-to-ts';
+
 export const sendVanLetterSchema = {
   tags: ['Carta VAN'],
   summary: 'Enviar uma carta VAN',
@@ -21,7 +23,6 @@ export const sendVanLetterSchema = {
             id: { type: 'integer' },
             cnpjEmitente: { type: 'string' },
             razaoSocial: { type: 'string' },
-            // Outros campos relevantes
           },
         },
       },
@@ -48,4 +49,7 @@ export const sendVanLetterSchema = {
       },
     },
   },
-};
+} as const;
+
+// Exporta o tipo derivado do esquema
+export type SendVanLetterBody = FromSchema<typeof sendVanLetterSchema.body>;
