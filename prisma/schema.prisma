@@ -28,6 +28,8 @@ model Produto {
   nome        String        @db.VarChar(255) // Nome do produto
   descricao   String        @unique @db.VarChar(255)
   configuracoes BancoConfiguracoes[]
+
+  CartaVan CartaVan[]
 }
 
 model BancoConfiguracoes {
@@ -53,6 +55,7 @@ model CartaVan {
   email            String
   bancoId          Int
   tipoCnabId       Int
+  produtoId        Int 
   servicoId        Int?
   agencia          String
   agenciaDV        String?
@@ -66,7 +69,8 @@ model CartaVan {
 
   banco    Banco        @relation(fields: [bancoId], references: [id], onDelete: Cascade)
   tipoCnab TipoCnab     @relation(fields: [tipoCnabId], references: [id], onDelete: Cascade)
-  servico  Servico?     @relation(fields: [servicoId], references: [id], onDelete: SetNull) // Relação com Servico
+  produto  Produto      @relation(fields: [produtoId], references: [id], onDelete: Cascade)
+  servico  Servico?     @relation(fields: [servicoId], references: [id], onDelete: SetNull)
   status   CartaStatus[] // Relação com a tabela intermediária de status
 }
 
