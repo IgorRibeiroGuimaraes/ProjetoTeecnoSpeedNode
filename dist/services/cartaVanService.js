@@ -12,72 +12,89 @@ const formatPhone_1 = require("../utils/formatPhone");
  * @returns Objeto contendo os dados da Carta VAN no formato esperado.
  */
 async function createCartaVan(data) {
-    // Obtém a data e hora atual em UTC
+    const produtoId = parseInt(data.produtoId, 10);
     const nowInUTC = luxon_1.DateTime.utc().toJSDate();
-    // Valida se o banco e o CNAB estão relacionados na tabela BancoConfiguracoes
     const configuracaoValida = await prisma_1.prisma.bancoConfiguracoes.findFirst({
         where: {
             bancoId: data.banco.bancoId,
             tipoCnab: {
-                id: data.banco.tipoCnabId, // Usa o relacionamento tipoCnab para validar o ID
+                id: data.banco.tipoCnabId,
             },
+            produtoId: produtoId,
         },
     });
     if (!configuracaoValida) {
-        throw new Error(`O banco com ID ${data.banco.bancoId} não suporta o CNAB com ID ${data.banco.tipoCnabId}.`);
+        throw new Error(`O banco com ID ${data.banco.bancoId} não suporta o CNAB com ID ${data.banco.tipoCnabId} e o Produto com ID ${produtoId}.`);
     }
-    // Cria a Carta VAN no banco de dados
-    const vanLetter = await prisma_1.prisma.cartaVan.create({
-        data: {
-            cnpjEmitente: data.emitente.cnpj, // CNPJ do emitente
-            razaoSocial: data.emitente.razaoSocial, // Razão social do emitente
-            nomeResponsavel: data.responsavel.nome, // Nome do responsável
-            cargoResponsavel: data.responsavel.cargo, // Cargo do responsável
-            telefone: (0, formatPhone_1.formatPhone)(data.responsavel.telefone), // Telefone do responsável formatado
-            email: data.responsavel.email, // E-mail do responsável
-            bancoId: data.banco.bancoId, // ID do banco
-            agencia: data.banco.agencia, // Agência do banco
-            agenciaDV: data.banco.agenciaDV, // Dígito verificador da agência
-            conta: data.banco.conta, // Número da conta
-            contaDV: data.banco.contaDV, // Dígito verificador da conta
-            convenio: data.banco.convenio, // Número do convênio
-            tipoCnabId: data.banco.tipoCnabId, // ID do tipo de CNAB
-            nomeGerente: data.banco.gerente.nome, // Nome do gerente
-            telefoneGerente: (0, formatPhone_1.formatPhone)(data.banco.gerente.telefone), // Telefone do gerente formatado
-            emailGerente: data.banco.gerente.email, // E-mail do gerente
-            createdAt: nowInUTC, // Data e hora de criação
-        },
-        include: {
-            tipoCnab: true, // Inclui os detalhes do tipo de CNAB na resposta
-            banco: true, // Inclui os detalhes do banco na resposta
+    const cartaDuplicada = await prisma_1.prisma.cartaVan.findFirst({
+        where: {
+            cnpjEmitente: data.emitente.cnpj,
+            bancoId: data.banco.bancoId,
+            tipoCnabId: data.banco.tipoCnabId,
+            produtoId: produtoId,
         },
     });
-    // Mapeia os dados retornados pelo Prisma para o formato esperado pelo vanResponseSchema
+    if (cartaDuplicada) {
+        throw new Error(`Já existe uma carta VAN para o CNPJ ${data.emitente.cnpj}, Banco ID ${data.banco.bancoId}, CNAB ID ${data.banco.tipoCnabId} e Produto ID ${produtoId}.`);
+    }
+    const vanLetter = await prisma_1.prisma.cartaVan.create({
+        data: {
+            cnpjEmitente: data.emitente.cnpj,
+            razaoSocial: data.emitente.razaoSocial,
+            nomeResponsavel: data.responsavel.nome,
+            cargoResponsavel: data.responsavel.cargo,
+            telefone: (0, formatPhone_1.formatPhone)(data.responsavel.telefone),
+            email: data.responsavel.email,
+            bancoId: data.banco.bancoId,
+            agencia: data.banco.agencia,
+            agenciaDV: data.banco.agenciaDV,
+            conta: data.banco.conta,
+            contaDV: data.banco.contaDV,
+            convenio: data.banco.convenio,
+            tipoCnabId: data.banco.tipoCnabId,
+            produtoId: produtoId, // Relacionamento com Produto
+            nomeGerente: data.banco.gerente.nome,
+            telefoneGerente: (0, formatPhone_1.formatPhone)(data.banco.gerente.telefone),
+            emailGerente: data.banco.gerente.email,
+            createdAt: nowInUTC,
+        },
+        include: {
+            tipoCnab: true,
+            banco: true,
+            produto: true, // Inclui os detalhes do produto na resposta
+        },
+    });
     return {
+        id: vanLetter.id,
         emitente: {
-            cnpj: vanLetter.cnpjEmitente, // CNPJ do emitente
-            razaoSocial: vanLetter.razaoSocial, // Razão social do emitente
+            cnpj: vanLetter.cnpjEmitente,
+            razaoSocial: vanLetter.razaoSocial,
         },
         responsavel: {
-            nome: vanLetter.nomeResponsavel, // Nome do responsável
-            cargo: vanLetter.cargoResponsavel, // Cargo do responsável
-            telefone: vanLetter.telefone, // Telefone do responsável
-            email: vanLetter.email, // E-mail do responsável
+            nome: vanLetter.nomeResponsavel,
+            cargo: vanLetter.cargoResponsavel,
+            telefone: vanLetter.telefone,
+            email: vanLetter.email,
         },
         banco: {
-            nome: vanLetter.banco.nome, // Nome do banco
-            agencia: vanLetter.agencia, // Agência do banco
-            agenciaDV: vanLetter.agenciaDV, // Dígito verificador da agência
-            conta: vanLetter.conta, // Número da conta
-            contaDV: vanLetter.contaDV, // Dígito verificador da conta
-            convenio: vanLetter.convenio, // Número do convênio
-            cnab: vanLetter.tipoCnab.descricao, // Nome do tipo de CNAB
+            nome: vanLetter.banco.nome,
+            agencia: vanLetter.agencia,
+            agenciaDV: vanLetter.agenciaDV,
+            conta: vanLetter.conta,
+            contaDV: vanLetter.contaDV,
+            convenio: vanLetter.convenio,
+            cnab: vanLetter.tipoCnab.descricao,
             gerente: {
-                nome: vanLetter.nomeGerente, // Nome do gerente
-                telefone: vanLetter.telefoneGerente, // Telefone do gerente
-                email: vanLetter.emailGerente, // E-mail do gerente
+                nome: vanLetter.nomeGerente,
+                telefone: vanLetter.telefoneGerente,
+                email: vanLetter.emailGerente,
             },
         },
-        createdAt: vanLetter.createdAt, // Data e hora de criação
+        produto: {
+            id: vanLetter.produto.id,
+            nome: vanLetter.produto.nome,
+            descricao: vanLetter.produto.descricao,
+        },
+        createdAt: vanLetter.createdAt,
     };
 }

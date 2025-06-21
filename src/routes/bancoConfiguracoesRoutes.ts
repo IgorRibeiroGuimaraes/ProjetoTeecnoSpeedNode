@@ -3,11 +3,6 @@ import { getBancoConfiguracoesHandler } from "../controllers/getBancoConfiguraco
 import { bancoConfiguracoesSchema } from "../schemas/bank/bancos-configuracoes";
 import { verificarAutenticacao } from "../middlewares/authMiddleware";
 
-/**
- * Registra a rota de configurações bancárias.
- *
- * @param app - Instância do Fastify usada para registrar a rota.
- */
 export async function bancoConfiguracoesRoutes(app: FastifyInstance) {
   app.get(
     "/bancos-configuracoes",

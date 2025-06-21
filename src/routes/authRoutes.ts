@@ -5,11 +5,6 @@ import { loginSchema } from '../schemas/auth/authSchema';
 import { logoutSchema } from '../schemas/auth/logout';
 import { protectedSchema } from '../schemas/auth/protected';
 
-/**
- * Registra as rotas de autenticação.
- *
- * @param fastify - Instância do Fastify usada para registrar as rotas.
- */
 export async function authRoutes(fastify: FastifyInstance) {
   // Rota para login
   fastify.post(

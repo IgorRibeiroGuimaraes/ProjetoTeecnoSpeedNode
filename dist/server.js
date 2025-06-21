@@ -12,11 +12,11 @@ const createVanLetter_1 = require("./routes/createVanLetter");
 const updateVanLetter_1 = require("./routes/updateVanLetter");
 const authRoutes_1 = require("./routes/authRoutes");
 const sendVanLetter_1 = require("./routes/sendVanLetter");
-const generateVanLetterPDF_1 = require("./routes/generateVanLetterPDF");
-const updateCartaServico_1 = require("./routes/updateCartaServico");
 const getService_1 = require("./routes/getService");
 const bancoConfiguracoesRoutes_1 = require("./routes/bancoConfiguracoesRoutes");
 const cors_1 = __importDefault(require("@fastify/cors"));
+const listCnpjLetter_1 = require("./routes/listCnpjLetter");
+const generateVanLetterPDF_1 = require("./routes/generateVanLetterPDF");
 dotenv_1.default.config(); // Carrega as variáveis de ambiente do .env
 const app = (0, fastify_1.default)({
     ajv: {
@@ -58,10 +58,10 @@ app.register(createVanLetter_1.createVanLetterRoute);
 app.register(updateVanLetter_1.updateVanLetterRoute);
 app.register(authRoutes_1.authRoutes);
 app.register(sendVanLetter_1.sendVanLetterRoutes);
-app.register(generateVanLetterPDF_1.generateVanLetterPDFRoute);
-app.register(updateCartaServico_1.updateCartaServicoRoute);
+app.register(generateVanLetterPDF_1.updateAndGenerateVanLettrePDF);
 app.register(getService_1.getServiceRoute);
 app.register(bancoConfiguracoesRoutes_1.bancoConfiguracoesRoutes);
+app.register(listCnpjLetter_1.cartaRoutes);
 // Tratamento de erros global
 app.setErrorHandler((error, req, rep) => {
     console.error("Erro:", error);
@@ -70,5 +70,5 @@ app.setErrorHandler((error, req, rep) => {
 // Inicia o servidor
 const PORT = Number(process.env.PORT) || 3000;
 app.listen({ port: PORT, host: '0.0.0.0' }).then(() => {
-    console.log(`🚀 Server running on port ${PORT}`);
+    console.log(`🚀 Server running `);
 });

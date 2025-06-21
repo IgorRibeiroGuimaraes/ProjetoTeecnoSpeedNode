@@ -8,6 +8,11 @@ import { prisma } from '../lib/prisma';
 export async function verificarCarta(cartaId: number) {
   return prisma.cartaVan.findUnique({
     where: { id: cartaId },
+    include: {
+      banco: true,
+      produto: true,
+      servico: true,
+    }
   });
 }
 

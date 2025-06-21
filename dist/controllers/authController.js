@@ -18,11 +18,23 @@ async function loginController(req, rep) {
     }
     try {
         const { accessToken } = await (0, authService_1.autenticarUsuario)(cnpj, senha);
-        (0, cookieUtils_1.definirCookie)(rep, 'authToken', accessToken, 3600); // Define o cookie com o token
-        return rep.status(200).send({ mensagem: 'Autenticação bem-sucedida.', token: accessToken });
+        (0, cookieUtils_1.definirCookie)(rep, 'authToken', accessToken, 3600);
+        return rep.status(200).send({
+            mensagem: 'Autenticação bem-sucedida.',
+            autenticado: true,
+        });
     }
     catch (error) {
-        return rep.status(500).send({ erro: 'Erro interno ao autenticar o usuário.' });
+        if (error instanceof authService_1.CnpjNaoEncontradoError) {
+            return rep.status(401).send({ erro: error.message, autenticado: false });
+        }
+        if (error instanceof authService_1.SenhaInvalidaError) {
+            return rep.status(401).send({ erro: error.message, autenticado: false });
+        }
+        return rep.status(500).send({
+            erro: 'Erro interno ao autenticar o usuário.',
+            autenticado: false,
+        });
     }
 }
 /**

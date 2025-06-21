@@ -24,7 +24,6 @@ exports.sendVanLetterSchema = {
                         id: { type: 'integer' },
                         cnpjEmitente: { type: 'string' },
                         razaoSocial: { type: 'string' },
-                        // Outros campos relevantes
                     },
                 },
             },

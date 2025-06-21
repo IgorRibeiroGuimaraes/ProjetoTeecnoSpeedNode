@@ -30,6 +30,7 @@ exports.vanRequestExample = {
             email: 'carlos.oliveira@banco.com', // E-mail do gerente
         },
     },
+    produtoId: 3, // ID do produto
 };
 /**
  * Exemplo de uma resposta bem-sucedida para a criação de uma Carta VAN.
@@ -59,6 +60,11 @@ exports.vanResponseExample = {
             telefone: '11 91234-5678', // Telefone do gerente
             email: 'carlos.oliveira@banco.com', // E-mail do gerente
         },
+    },
+    produto: {
+        id: 3, // ID do produto
+        nome: 'Produto X', // Nome do produto
+        descricao: 'Descrição do Produto X', // Descrição do produto
     },
     createdAt: '2025-04-12T12:34:56.789Z', // Data e hora de criação da carta
 };

@@ -1,26 +1,16 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.updateLetterServiceSchema = void 0;
-exports.updateLetterServiceSchema = {
-    description: 'Atualiza o serviço associado a uma carta.',
+exports.updateAndGenearateLetterServicPDFSchema = void 0;
+exports.updateAndGenearateLetterServicPDFSchema = {
+    description: 'Atualiza o serviço de uma carta e gera um PDF assinado',
     tags: ['Carta VAN'],
-    params: {
-        type: 'object',
-        properties: {
-            id: { type: 'number', description: 'ID da carta' },
-        },
-        required: ['id'],
-    },
     body: {
         type: 'object',
         properties: {
+            cartaId: { type: 'number', description: 'ID da carta' },
             servicoId: { type: 'number', description: 'ID do serviço' },
-            servicoNome: { type: 'string', description: 'Nome do serviço' },
         },
-        oneOf: [
-            { required: ['servicoId'] },
-            { required: ['servicoNome'] },
-        ],
+        required: ['cartaId', 'servicoId'],
     },
     response: {
         200: {
@@ -35,7 +25,9 @@ exports.updateLetterServiceSchema = {
                         servicoId: { type: 'number' },
                     },
                 },
+                pdfUrl: { type: 'string', description: 'URL assinada do PDF gerado' },
             },
+            required: ['mensagem', 'carta', 'pdfUrl'],
         },
         400: {
             description: 'Erro de validação',

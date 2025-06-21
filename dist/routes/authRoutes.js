@@ -6,11 +6,6 @@ const authMiddleware_1 = require("../middlewares/authMiddleware");
 const authSchema_1 = require("../schemas/auth/authSchema");
 const logout_1 = require("../schemas/auth/logout");
 const protected_1 = require("../schemas/auth/protected");
-/**
- * Registra as rotas de autenticação.
- *
- * @param fastify - Instância do Fastify usada para registrar as rotas.
- */
 async function authRoutes(fastify) {
     // Rota para login
     fastify.post('/auth/login', {

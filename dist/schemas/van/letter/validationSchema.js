@@ -1,36 +1,37 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.vanBodySchema = void 0;
+exports.vanSchema = exports.vanBodySchema = void 0;
 const vanExamples_1 = require("../../../fixtures/vanExamples");
+const ResponseSchema_1 = require("./ResponseSchema");
 /**
  * Esquema de validação do corpo da requisição para a criação de uma Carta VAN.
  * Este esquema define os campos obrigatórios e suas propriedades para garantir que a requisição
  * esteja no formato esperado antes de ser processada.
  */
 exports.vanBodySchema = {
-    type: 'object', // Tipo do objeto esperado no corpo da requisição
-    required: ['emitente', 'responsavel', 'banco'], // Campos obrigatórios no nível superior
+    type: 'object',
+    required: ['emitente', 'responsavel', 'banco', 'produtoId'], // Adicionado 'produtoId' como obrigatório
     properties: {
         emitente: {
-            type: 'object', // Tipo do campo emitente
-            required: ['cnpj', 'razaoSocial'], // Campos obrigatórios do emitente
+            type: 'object',
+            required: ['cnpj', 'razaoSocial'],
             properties: {
-                cnpj: { type: 'string' }, // CNPJ do emitente
-                razaoSocial: { type: 'string' }, // Razão social do emitente
+                cnpj: { type: 'string' },
+                razaoSocial: { type: 'string' },
             },
         },
         responsavel: {
-            type: 'object', // Tipo do campo responsável
-            required: ['nome', 'cargo', 'telefone', 'email'], // Campos obrigatórios do responsável
+            type: 'object',
+            required: ['nome', 'cargo', 'telefone', 'email'],
             properties: {
-                nome: { type: 'string' }, // Nome do responsável
-                cargo: { type: 'string' }, // Cargo do responsável
-                telefone: { type: 'string' }, // Telefone do responsável
-                email: { type: 'string' }, // E-mail do responsável
+                nome: { type: 'string' },
+                cargo: { type: 'string' },
+                telefone: { type: 'string' },
+                email: { type: 'string' },
             },
         },
         banco: {
-            type: 'object', // Tipo do campo banco
+            type: 'object',
             required: [
                 'bancoId',
                 'agencia',
@@ -40,26 +41,41 @@ exports.vanBodySchema = {
                 'convenio',
                 'tipoCnabId',
                 'gerente',
-            ], // Campos obrigatórios do banco
+            ],
             properties: {
-                bancoId: { type: 'number' }, // ID do banco
-                agencia: { type: 'string' }, // Agência do banco
-                agenciaDV: { type: 'string' }, // Dígito verificador da agência
-                conta: { type: 'number' }, // Número da conta
-                contaDV: { type: 'number' }, // Dígito verificador da conta
-                convenio: { type: 'string' }, // Número do convênio
-                tipoCnabId: { type: 'number' }, // ID do tipo de CNAB
+                bancoId: { type: 'number' },
+                agencia: { type: 'string' },
+                agenciaDV: { type: 'string' },
+                conta: { type: 'number' },
+                contaDV: { type: 'number' },
+                convenio: { type: 'string' },
+                tipoCnabId: { type: 'number' },
                 gerente: {
-                    type: 'object', // Tipo do campo gerente
-                    required: ['nome', 'telefone', 'email'], // Campos obrigatórios do gerente
+                    type: 'object',
+                    required: ['nome', 'telefone', 'email'],
                     properties: {
-                        nome: { type: 'string' }, // Nome do gerente
-                        telefone: { type: 'string' }, // Telefone do gerente
-                        email: { type: 'string' }, // E-mail do gerente
+                        nome: { type: 'string' },
+                        telefone: { type: 'string' },
+                        email: { type: 'string' },
                     },
                 },
             },
         },
+        produtoId: {
+            type: 'number',
+            description: 'ID do produto relacionado à Carta VAN',
+            example: 1,
+        },
     },
-    example: vanExamples_1.vanRequestExample, // Exemplo de uma requisição válida
+    example: vanExamples_1.vanRequestExample,
+};
+exports.vanSchema = {
+    tags: ['Carta VAN'], // Tag para categorizar a rota na documentação
+    summary: 'Criar Carta VAN', // Resumo da funcionalidade da rota
+    description: 'Esta rota é utilizada para criar uma nova Carta VAN, um documento necessário para formalizar a autorização entre o cliente e a Software House junto ao banco.\n\n' +
+        'A requisição deve conter informações do emitente, do responsável, do banco e do gerente responsável.\n' +
+        'Todos os dados são validados antes de serem armazenados e, em caso de sucesso, a carta é registrada no sistema com a data e hora da criação.\n\n' +
+        'Essa rota é ideal para ser utilizada em sistemas administrativos ou portais internos que precisem gerar este documento para posterior assinatura e envio ao banco.',
+    body: exports.vanBodySchema, // Referência ao esquema do corpo
+    response: ResponseSchema_1.vanResponseSchema
 };

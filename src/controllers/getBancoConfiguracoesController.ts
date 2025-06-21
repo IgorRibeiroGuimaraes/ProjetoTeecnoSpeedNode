@@ -1,6 +1,17 @@
 import { FastifyRequest, FastifyReply } from "fastify";
 import { prisma } from "../lib/prisma";
 
+/**
+ * Handler para buscar as configurações de bancos.
+ * Este handler é responsável por:
+ * 1. Buscar todas as configurações de bancos, incluindo CNABs e Produtos.
+ * 2. Formatar os dados para um JSON estruturado.
+ * 3. Retornar os dados formatados ou uma mensagem de erro.
+ *
+ * @param req - Objeto da requisição Fastify.
+ * @param rep - Objeto da resposta Fastify.
+ * @returns Resposta HTTP com os dados da carta criada ou mensagem de erro.
+ */
 export async function getBancoConfiguracoesHandler(req: FastifyRequest, rep: FastifyReply) {
   try {
     // Busca todas as configurações de bancos, incluindo CNABs e Produtos

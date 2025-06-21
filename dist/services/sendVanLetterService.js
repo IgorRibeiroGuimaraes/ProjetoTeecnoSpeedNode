@@ -13,6 +13,11 @@ const prisma_1 = require("../lib/prisma");
 async function verificarCarta(cartaId) {
     return prisma_1.prisma.cartaVan.findUnique({
         where: { id: cartaId },
+        include: {
+            banco: true,
+            produto: true,
+            servico: true,
+        }
     });
 }
 /**

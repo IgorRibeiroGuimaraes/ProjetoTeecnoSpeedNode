@@ -19,7 +19,7 @@ exports.vanSchema = zod_1.z.object({
         cargo: zod_1.z.string().nonempty('cargoResponsavel não pode ser vazio'), // Cargo do responsável não pode ser vazio
         telefone: zod_1.z.string()
             .nonempty('telefone não pode ser vazio') // Telefone não pode ser vazio
-            .regex(/^\d{2} \d{5}-\d{4}$/, 'telefone deve seguir o formato 99 99999-9999'), // Valida o formato do telefone
+            .regex(/^(\d{2} \d{5}-\d{4}|\d{11}|\(\d{2}\)\d{5}-\d{4})$/, 'telefone deve seguir um dos formatos: 99 99999-9999, 99999999999 ou (99)99999-9999'), // Valida o formato do telefone
         email: zod_1.z.string()
             .nonempty('email não pode ser vazio') // E-mail não pode ser vazio
             .email('email inválido'), // Valida que o e-mail está no formato correto
@@ -35,11 +35,12 @@ exports.vanSchema = zod_1.z.object({
         gerente: zod_1.z.object({
             nome: zod_1.z.string().nonempty('nomeGerente não pode ser vazio'), // Nome do gerente não pode ser vazio
             telefone: zod_1.z.string()
-                .nonempty('telefoneGerente não pode ser vazio') // Telefone do gerente não pode ser vazio
-                .regex(/^\d{2} \d{5}-\d{4}$/, 'telefoneGerente deve seguir o formato 99 99999-9999'), // Valida o formato do telefone do gerente
+                .nonempty('telefone não pode ser vazio') // Telefone não pode ser vazio
+                .regex(/^(\d{2} \d{5}-\d{4}|\d{11}|\(\d{2}\)\d{5}-\d{4})$/, 'telefone deve seguir um dos formatos: 99 99999-9999, 99999999999 ou (99)99999-9999'),
             email: zod_1.z.string()
                 .nonempty('emailGerente não pode ser vazio') // E-mail do gerente não pode ser vazio
                 .email('emailGerente inválido'), // Valida que o e-mail do gerente está no formato correto
         }),
     }),
+    produtoId: zod_1.z.number().int().positive('O campo Produto ID deve ser um número positivo'),
 });

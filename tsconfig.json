@@ -9,6 +9,6 @@
     "outDir": "./dist", // Define o diretório de saída para os arquivos compilados
     "rootDir": "./src" // Define o diretório raiz dos arquivos de entrada
   },
-  "include": ["src/**/*"], // Inclui todos os arquivos na pasta src
+  "include": ["src/**/*", "src/testSupabaseStorage.ts"], // Inclui todos os arquivos na pasta src
   "exclude": ["node_modules"] // Exclui a pasta node_modules
 }

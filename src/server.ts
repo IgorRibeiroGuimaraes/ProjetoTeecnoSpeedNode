@@ -7,11 +7,11 @@ import { createVanLetterRoute } from "./routes/createVanLetter";
 import { updateVanLetterRoute } from "./routes/updateVanLetter";
 import { authRoutes } from "./routes/authRoutes"; 
 import { sendVanLetterRoutes } from "./routes/sendVanLetter";
-import { generateVanLetterPDFRoute } from "./routes/generateVanLetterPDF";
-import { updateCartaServicoRoute } from "./routes/updateCartaServico";
 import { getServiceRoute } from "./routes/getService";
 import { bancoConfiguracoesRoutes } from "./routes/bancoConfiguracoesRoutes";
 import cors from "@fastify/cors";
+import { cartaRoutes } from "./routes/listCnpjLetter";
+import { updateAndGenerateVanLettrePDF } from "./routes/generateVanLetterPDF";
 
 dotenv.config(); // Carrega as variáveis de ambiente do .env
 
@@ -60,10 +60,10 @@ app.register(createVanLetterRoute);
 app.register(updateVanLetterRoute);
 app.register(authRoutes);
 app.register(sendVanLetterRoutes)
-app.register(generateVanLetterPDFRoute)
-app.register(updateCartaServicoRoute)
+app.register(updateAndGenerateVanLettrePDF)
 app.register(getServiceRoute)
 app.register(bancoConfiguracoesRoutes)
+app.register(cartaRoutes)
 
 // Tratamento de erros global
 app.setErrorHandler((error, req, rep) => {

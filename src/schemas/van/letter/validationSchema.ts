@@ -1,4 +1,5 @@
 import { vanRequestExample } from '../../../fixtures/vanExamples';
+import { vanResponseSchema } from './ResponseSchema';
 
 /**
  * Esquema de validação do corpo da requisição para a criação de uma Carta VAN.
@@ -76,4 +77,5 @@ export const vanSchema = {
     'Todos os dados são validados antes de serem armazenados e, em caso de sucesso, a carta é registrada no sistema com a data e hora da criação.\n\n' +
     'Essa rota é ideal para ser utilizada em sistemas administrativos ou portais internos que precisem gerar este documento para posterior assinatura e envio ao banco.',
   body: vanBodySchema, // Referência ao esquema do corpo
+  response: vanResponseSchema
 };

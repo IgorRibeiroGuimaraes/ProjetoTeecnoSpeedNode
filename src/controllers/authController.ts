@@ -1,5 +1,5 @@
 import { FastifyReply, FastifyRequest } from 'fastify';
-import { autenticarUsuario } from '../services/authService';
+import { autenticarUsuario, CnpjNaoEncontradoError, SenhaInvalidaError } from '../services/authService';
 import { definirCookie } from '../utils/cookieUtils';
 
 /**
@@ -19,11 +19,23 @@ export async function loginController(req: FastifyRequest, rep: FastifyReply) {
   try {
     const { accessToken } = await autenticarUsuario(cnpj, senha);
 
-    definirCookie(rep, 'authToken', accessToken, 3600); // Define o cookie com o token
+    definirCookie(rep, 'authToken', accessToken, 3600);
 
-    return rep.status(200).send({ mensagem: 'Autenticação bem-sucedida.', token: accessToken });
+    return rep.status(200).send({
+      mensagem: 'Autenticação bem-sucedida.',
+      autenticado: true,
+    });
   } catch (error) {
-    return rep.status(500).send({ erro: 'Erro interno ao autenticar o usuário.' });
+    if (error instanceof CnpjNaoEncontradoError) {
+      return rep.status(401).send({ erro: error.message, autenticado: false });
+    }
+    if (error instanceof SenhaInvalidaError) {
+      return rep.status(401).send({ erro: error.message, autenticado: false });
+    }
+    return rep.status(500).send({
+      erro: 'Erro interno ao autenticar o usuário.',
+      autenticado: false,
+    });
   }
 }
 

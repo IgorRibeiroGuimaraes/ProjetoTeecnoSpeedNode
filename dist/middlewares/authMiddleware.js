@@ -8,7 +8,7 @@ const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const authController_1 = require("../controllers/authController");
 /**
  * Middleware para verificar a validade do token.
- * Caso o token esteja expirado, força o logout do usuário.
+ * Caso o token esteja expirado ou inválido, força o logout do usuário e retorna o erro apropriado.
  *
  * @param req - Objeto da requisição HTTP.
  * @param rep - Objeto da resposta HTTP.
@@ -16,7 +16,7 @@ const authController_1 = require("../controllers/authController");
 async function verificarAutenticacao(req, rep) {
     const authToken = req.cookies.authToken;
     if (!authToken) {
-        return rep.status(401).send({ erro: 'Usuário não autenticado.' });
+        return rep.status(401).send({ erro: 'Usuário não autenticado. Token não encontrado.' });
     }
     try {
         const decoded = jsonwebtoken_1.default.verify(authToken, process.env.JWT_SECRET);
@@ -25,6 +25,7 @@ async function verificarAutenticacao(req, rep) {
             await (0, authController_1.logoutController)(req, rep);
             return rep.status(401).send({ erro: 'Sessão expirada. Faça login novamente.' });
         }
+        // Adiciona os dados do usuário decodificados à requisição
         req.user = decoded; // Agora `user` está disponível no tipo `FastifyRequest`
     }
     catch (error) {
@@ -32,6 +33,6 @@ async function verificarAutenticacao(req, rep) {
             await (0, authController_1.logoutController)(req, rep);
             return rep.status(401).send({ erro: 'Sessão expirada. Faça login novamente.' });
         }
-        return rep.status(401).send({ erro: 'Token inválido.' });
+        return rep.status(401).send({ erro: 'Token inválido. Verifique suas credenciais.' });
     }
 }

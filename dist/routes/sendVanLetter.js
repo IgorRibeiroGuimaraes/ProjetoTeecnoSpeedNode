@@ -3,6 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.sendVanLetterRoutes = sendVanLetterRoutes;
 const sendVanLetterController_1 = require("../controllers/sendVanLetterController");
 const sendVanLetterSchema_1 = require("../schemas/van/letter/sendVanLetterSchema");
+const authMiddleware_1 = require("../middlewares/authMiddleware");
 /**
  * Registra a rota para envio de uma Carta VAN.
  *
@@ -12,6 +13,7 @@ const sendVanLetterSchema_1 = require("../schemas/van/letter/sendVanLetterSchema
  */
 async function sendVanLetterRoutes(fastify) {
     fastify.post('/cartas/van/enviar', {
-        schema: sendVanLetterSchema_1.sendVanLetterSchema
+        schema: sendVanLetterSchema_1.sendVanLetterSchema,
+        preHandler: authMiddleware_1.verificarAutenticacao,
     }, sendVanLetterController_1.sendVanLetterController);
 }

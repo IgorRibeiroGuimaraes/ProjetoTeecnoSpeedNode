@@ -76,6 +76,7 @@ export async function createCartaVan(data: any) {
   });
 
   return {
+    id:vanLetter.id,
     emitente: {
       cnpj: vanLetter.cnpjEmitente,
       razaoSocial: vanLetter.razaoSocial,

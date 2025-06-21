@@ -51,6 +51,14 @@ exports.vanResponseSchema = {
                     },
                 },
             },
+            produto: {
+                type: 'object',
+                properties: {
+                    id: { type: 'number' }, // ID do produto
+                    nome: { type: 'string' }, // Nome do produto
+                    descricao: { type: 'string' }, // Descrição do produto
+                },
+            },
             createdAt: { type: 'string', format: 'date-time' }, // Data e hora de criação da carta
         },
         example: vanExamples_1.vanResponseExample, // Exemplo de resposta bem-sucedida
