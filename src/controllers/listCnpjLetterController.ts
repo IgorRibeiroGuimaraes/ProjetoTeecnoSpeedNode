@@ -1,24 +1,15 @@
 import { FastifyRequest, FastifyReply } from 'fastify';
 import { buscarCartaPorCnpjService } from '../services/buscarCartaPorCnpjService';
 import { getSignedUrl } from '../storage/supabaseStorage';
+import { listLetterCNPJSchema } from '../schemas/van/letter/listcnpjletterschema';
 
 /**
- * Handler para o envio do PDF
- * Este handler é responsável por:
- * 1. Trazer as cartas através do CNPJ sendo eles alguns campos específicos.
- * 2. Gerar uma URL assinada para o PDF da carta.
- *
- * @param req - Objeto da requisição Fastify.
- * @param rep - Objeto da resposta Fastify.
- * @returns Resposta HTTP com os dados da carta criada ou mensagem de erro.
+ * Handler para o envio do PDF.
  */
 export async function getLetterController(request: FastifyRequest, reply: FastifyReply) {
   try {
-    const { cnpj } = request.query as { cnpj?: string };
-
-    if (!cnpj) {
-      return reply.status(400).send({ message: 'CNPJ é obrigatório.' });
-    }
+    // Validação usando Zod
+    const { cnpj } = listLetterCNPJSchema.parse(request).query;
 
     const carta = await buscarCartaPorCnpjService(cnpj);
 
@@ -30,6 +21,7 @@ export async function getLetterController(request: FastifyRequest, reply: Fastif
     const dataCriacaoFormatada = carta.createdAt.toISOString().split('T')[0];
     const filePathInBucket = `${sanitizedCnpj}/${dataCriacaoFormatada}/carta_${carta.servicoNome}_${carta.id}.pdf`;
 
+    console.log(filePathInBucket)
     const signedUrl = await getSignedUrl(filePathInBucket, 3600);
 
     if (!signedUrl) {
@@ -45,7 +37,14 @@ export async function getLetterController(request: FastifyRequest, reply: Fastif
       pdfUrl: signedUrl,
       dataCriacao: carta.dataCriacao,
     });
-  } catch (error) {
+  } catch (error: any) {
+    if (error.name === 'ZodError') {
+      return reply.status(400).send({
+        message: 'Parâmetros inválidos.',
+        detalhes: error.errors
+      });
+    }
+
     console.error(error);
     return reply.status(500).send({ message: 'Erro interno ao buscar a carta.' });
   }

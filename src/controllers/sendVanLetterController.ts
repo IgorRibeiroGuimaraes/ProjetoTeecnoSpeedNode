@@ -3,6 +3,7 @@ import { buscarStatusAberta, contarCartasAbertasPorCarta, associarStatusAberta, 
 import { downloadFileFromSupabaseAsBase64 } from '../storage/supabaseStorage';
 import axios from 'axios';
 import FormData from 'form-data';
+import { sendVanLetterSchemaRequest } from '../schemas/van/letter/sendVanLetterSchema';
 
 interface SendVanLetterBody {
   cartaId: number;
@@ -20,12 +21,13 @@ interface SendVanLetterBody {
  * @returns Resposta HTTP com os dados da carta criada ou mensagem de erro.
  */
 export async function sendVanLetterController(
-  req: FastifyRequest<{ Body: SendVanLetterBody }>,
+  req: FastifyRequest,
   rep: FastifyReply
 ) {
-  const { cartaId } = req.body;
-
   try {
+    // Validação com Zod
+    const { cartaId } = sendVanLetterSchemaRequest.parse(req).body;
+
     const carta = await verificarCarta(cartaId);
     if (!carta) {
       return rep.status(404).send({ erro: 'Carta não encontrada.' });
@@ -68,8 +70,6 @@ export async function sendVanLetterController(
     formData.append('CNPJ_cliente', dataToSend.CNPJ_cliente);
     formData.append('Produto', dataToSend.Produto);
 
-    // Logar os headers do formData
-
     // Enviar para o Zapier
     const response = await axios.post('https://hooks.zapier.com/hooks/catch/21923307/2gwb3a6/', formData, {
       headers: formData.getHeaders(),
@@ -77,13 +77,19 @@ export async function sendVanLetterController(
 
     console.log('Resposta do Zapier:', response.data);
 
-    // Retornar sucesso + dados enviados + resposta do Zapier
     return rep.status(201).send({
       mensagem: 'Carta enviada com sucesso e arquivo enviado ao Zapier.',
       dadosEnviados: dataToSend,
       respostaZapier: response.data,
     });
-  } catch (error) {
+  } catch (error: any) {
+    if (error.name === 'ZodError') {
+      return rep.status(400).send({
+        erro: 'Dados inválidos no body.',
+        detalhes: error.errors
+      });
+    }
+
     console.error('Erro ao enviar carta:', error);
     return rep.status(500).send({ erro: 'Erro interno ao enviar a carta.' });
   }

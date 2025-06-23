@@ -35,6 +35,7 @@ export const vanRequestExample = {
  * Este exemplo pode ser usado em testes ou na documentação da API.
  */
 export const vanResponseExample = {
+  id : 1, // ID da carta VAN 
   emitente: {
     cnpj: '98765432000187', // CNPJ do emitente
     razaoSocial: 'Empresa Exemplo LTDA', // Razão social do emitente

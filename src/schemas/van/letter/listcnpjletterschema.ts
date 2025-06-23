@@ -1,3 +1,5 @@
+import { z } from 'zod';
+
 export const listcnpjletterschema = {
   summary: 'Listar serviços por CNPJ',
   description: 'Retorna a lista de cartas, através do CNPJ, Requer autenticação.',
@@ -43,3 +45,15 @@ export const listcnpjletterschema = {
     }
   }
 };
+
+
+export const listLetterCNPJSchema = z.object({
+  query: z.object({
+    cnpj: z
+      .string({
+        required_error: 'O CNPJ é obrigatório.',
+        invalid_type_error: 'O CNPJ deve ser uma string.',
+      })
+      .regex(/^\d{14}$/, 'O CNPJ deve conter exatamente 14 números.')
+  })
+});

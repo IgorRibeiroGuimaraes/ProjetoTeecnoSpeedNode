@@ -19,6 +19,7 @@ export async function getCartaById(cartaId: number) {
       banco: true,
       tipoCnab: true,
       servico: true,
+      produto: true
     },
   });
 }

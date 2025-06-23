@@ -1,3 +1,4 @@
+import { z } from 'zod';
 import { FromSchema } from 'json-schema-to-ts';
 
 export const sendVanLetterSchema = {
@@ -53,3 +54,12 @@ export const sendVanLetterSchema = {
 
 // Exporta o tipo derivado do esquema
 export type SendVanLetterBody = FromSchema<typeof sendVanLetterSchema.body>;
+
+export const sendVanLetterSchemaRequest = z.object({
+  body: z.object({
+    cartaId: z.number({
+      required_error: 'O ID da carta é obrigatório.',
+      invalid_type_error: 'O ID da carta deve ser um número.',
+    }).int().positive('O ID da carta deve ser um número positivo.'),
+  })
+});

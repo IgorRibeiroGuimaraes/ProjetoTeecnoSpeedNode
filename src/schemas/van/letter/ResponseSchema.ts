@@ -17,6 +17,7 @@ export const vanResponseSchema = {
     description: 'Carta VAN criada com sucesso', // Descrição da resposta
     type: 'object', // Tipo do objeto retornado
     properties: {
+      id: { type: 'number' }, // ID da carta criada
       emitente: {
         type: 'object',
         properties: {

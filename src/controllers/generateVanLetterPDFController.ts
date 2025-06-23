@@ -1,4 +1,5 @@
-import { FastifyReply, FastifyRequest } from 'fastify';
+// src/services/generateVanLetterPDFService.ts
+
 import { getCartaById, generatePDF } from '../services/generateVanLetterPDFService';
 import { uploadPdfToSupabase, getSignedUrl } from '../storage/supabaseStorage';
 import { generateLetterHtmlFromTemplate } from '../services/letterTemplateService';
@@ -10,12 +11,12 @@ import { generateLetterHtmlFromTemplate } from '../services/letterTemplateServic
  * 2. Fazer o upload do PDF gerado para o Supabase.
  * 3. Retornar a URL assinada do PDF gerado.
  *
- * @param req - Objeto da requisição Fastify.
- * @param rep - Objeto da resposta Fastify.
- * @returns Resposta HTTP com os dados da carta criada ou mensagem de erro.
+ * @param cartaId - ID da carta a ser processada.
+ * @returns URL assinada do PDF ou lança erro em caso de falha.
  */
 export async function generateVanLetterPDFHandler(cartaId: number): Promise<string> {
   console.log('Iniciando geração do PDF para cartaId:', cartaId);
+
   const carta = await getCartaById(cartaId);
 
   if (!carta) {
