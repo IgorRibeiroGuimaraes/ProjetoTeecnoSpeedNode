@@ -28,7 +28,7 @@ app.register(cookie, {
   secret: process.env.COOKIE_SECRET || "seu-segredo-de-cookie", // Segredo para assinar cookies
   parseOptions: {
     httpOnly: true, // Cookies HTTP-only
-    secure: process.env.NODE_ENV === "production", // Apenas HTTPS em produção
+    secure: true, // Apenas HTTPS em produção
     sameSite: "none", // Permite cookies cross-site
   },
 });
