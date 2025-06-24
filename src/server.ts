@@ -49,7 +49,7 @@ app.register(swaggerUI, {
 });
 
 app.register(cors, {
-  origin: process.env.WEB_BASE_URL || "*", // Puxa a URL do front-end do .env ou permite todas as origens como fallback
+  origin: "https://vanletter-seven.vercel.app", // Puxa a URL do front-end do .env ou permite todas as origens como fallback
   methods: ["GET", "POST", "PUT", "DELETE"], // Métodos permitidos
   allowedHeaders: ["Content-Type", "Authorization"], // Cabeçalhos permitidos
   credentials: true, // Permite cookies e cabeçalhos de autenticação
