@@ -30,7 +30,7 @@ app.register(cookie_1.default, {
     secret: process.env.COOKIE_SECRET || "seu-segredo-de-cookie", // Segredo para assinar cookies
     parseOptions: {
         httpOnly: true, // Cookies HTTP-only
-        secure: process.env.NODE_ENV === "production", // Apenas HTTPS em produção
+        secure: true, // Apenas HTTPS em produção
         sameSite: "none", // Permite cookies cross-site
     },
 });
@@ -48,7 +48,7 @@ app.register(swagger_ui_1.default, {
     routePrefix: "/docs",
 });
 app.register(cors_1.default, {
-    origin: process.env.WEB_BASE_URL || "*", // Puxa a URL do front-end do .env ou permite todas as origens como fallback
+    origin: "https://vanletter-seven.vercel.app", // Puxa a URL do front-end do .env ou permite todas as origens como fallback
     methods: ["GET", "POST", "PUT", "DELETE"], // Métodos permitidos
     allowedHeaders: ["Content-Type", "Authorization"], // Cabeçalhos permitidos
     credentials: true, // Permite cookies e cabeçalhos de autenticação

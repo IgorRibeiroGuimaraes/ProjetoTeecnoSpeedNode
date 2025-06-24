@@ -9,11 +9,12 @@ exports.definirCookie = definirCookie;
  * @param maxAge Tempo de expiração do cookie em segundos.
  */
 function definirCookie(rep, nome, valor, maxAge) {
+    console.log('NODE_ENV:', process.env.NODE_ENV); // Adicione este log
     rep.setCookie(nome, valor, {
         httpOnly: true,
-        secure: process.env.NODE_ENV === 'production', // Apenas em HTTPS em produção
-        sameSite: 'strict', // Proteção contra CSRF
+        secure: true,
+        sameSite: 'none',
         path: '/',
-        maxAge, // Tempo de expiração em segundos
+        maxAge: 60 * 60,
     });
 }
