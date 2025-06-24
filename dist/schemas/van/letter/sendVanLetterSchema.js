@@ -1,6 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.sendVanLetterSchema = void 0;
+exports.sendVanLetterSchemaRequest = exports.sendVanLetterSchema = void 0;
+const zod_1 = require("zod");
 exports.sendVanLetterSchema = {
     tags: ['Carta VAN'],
     summary: 'Enviar uma carta VAN',
@@ -51,3 +52,11 @@ exports.sendVanLetterSchema = {
         },
     },
 };
+exports.sendVanLetterSchemaRequest = zod_1.z.object({
+    body: zod_1.z.object({
+        cartaId: zod_1.z.number({
+            required_error: 'O ID da carta é obrigatório.',
+            invalid_type_error: 'O ID da carta deve ser um número.',
+        }).int().positive('O ID da carta deve ser um número positivo.'),
+    })
+});

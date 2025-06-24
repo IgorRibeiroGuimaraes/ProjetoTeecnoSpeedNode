@@ -25,6 +25,7 @@ async function getCartaById(cartaId) {
             banco: true,
             tipoCnab: true,
             servico: true,
+            produto: true
         },
     });
 }

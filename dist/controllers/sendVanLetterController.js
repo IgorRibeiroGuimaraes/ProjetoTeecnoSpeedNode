@@ -8,6 +8,7 @@ const sendVanLetterService_1 = require("../services/sendVanLetterService");
 const supabaseStorage_1 = require("../storage/supabaseStorage");
 const axios_1 = __importDefault(require("axios"));
 const form_data_1 = __importDefault(require("form-data"));
+const sendVanLetterSchema_1 = require("../schemas/van/letter/sendVanLetterSchema");
 /**
  * Handler para o envio do PDF
  * Este handler é responsável por:
@@ -20,8 +21,9 @@ const form_data_1 = __importDefault(require("form-data"));
  * @returns Resposta HTTP com os dados da carta criada ou mensagem de erro.
  */
 async function sendVanLetterController(req, rep) {
-    const { cartaId } = req.body;
     try {
+        // Validação com Zod
+        const { cartaId } = sendVanLetterSchema_1.sendVanLetterSchemaRequest.parse(req).body;
         const carta = await (0, sendVanLetterService_1.verificarCarta)(cartaId);
         if (!carta) {
             return rep.status(404).send({ erro: 'Carta não encontrada.' });
@@ -56,13 +58,11 @@ async function sendVanLetterController(req, rep) {
         formData.append('arquivo', `data:application/pdf;base64,${base64PDF}`);
         formData.append('CNPJ_cliente', dataToSend.CNPJ_cliente);
         formData.append('Produto', dataToSend.Produto);
-        // Logar os headers do formData
         // Enviar para o Zapier
         const response = await axios_1.default.post('https://hooks.zapier.com/hooks/catch/21923307/2gwb3a6/', formData, {
             headers: formData.getHeaders(),
         });
         console.log('Resposta do Zapier:', response.data);
-        // Retornar sucesso + dados enviados + resposta do Zapier
         return rep.status(201).send({
             mensagem: 'Carta enviada com sucesso e arquivo enviado ao Zapier.',
             dadosEnviados: dataToSend,
@@ -70,6 +70,12 @@ async function sendVanLetterController(req, rep) {
         });
     }
     catch (error) {
+        if (error.name === 'ZodError') {
+            return rep.status(400).send({
+                erro: 'Dados inválidos no body.',
+                detalhes: error.errors
+            });
+        }
         console.error('Erro ao enviar carta:', error);
         return rep.status(500).send({ erro: 'Erro interno ao enviar a carta.' });
     }

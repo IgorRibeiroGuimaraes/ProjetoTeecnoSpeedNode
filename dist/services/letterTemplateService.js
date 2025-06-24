@@ -5,7 +5,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.generateLetterHtmlFromTemplate = generateLetterHtmlFromTemplate;
 const fs_1 = __importDefault(require("fs"));
-const generateVanLetterPDFService_1 = require("./generateVanLetterPDFService"); // ou mova também esse helper
+const generateVanLetterPDFService_1 = require("./generateVanLetterPDFService");
 function generateLetterHtmlFromTemplate(carta) {
     const { templatePath, cssPath } = (0, generateVanLetterPDFService_1.getTemplatePaths)(carta.servico.nome);
     let html = fs_1.default.readFileSync(templatePath, 'utf8');
@@ -28,6 +28,45 @@ function generateLetterHtmlFromTemplate(carta) {
         .replace(/\[NOME DO GERENTE DO BANCO\]/g, carta.nomeGerente)
         .replace(/\[TELEFONE GERENTE\]/g, carta.telefoneGerente || '')
         .replace(/\[E-MAIL GERENTE DO BANCO\]/g, carta.emailGerente || '')
-        .replace(/\[CARGO RESP. EMPRESA\]/g, carta.cargoResponsavel || '');
+        .replace(/\[CARGO RESP. EMPRESA\]/g, carta.cargoResponsavel || '')
+        .replace(/\[PRODUTO DO CARTA\]/g, carta.produto?.nome || '')
+        .replace(/\[CNAB\]/g, carta.tipoCnab?.descricao || '');
+    // Substituição das opções selecionadas
+    html = marcarOpcoesSelecionadas(html, carta);
+    html = marcarCnabSelecionado(html, carta);
     return html;
+}
+function marcarOpcoesSelecionadas(html, carta) {
+    // Produtos selecionados com os nomes (agora já buscados no banco)
+    const opcoesSelecionadas = carta.produto?.nome || [];
+    const opcoes = [
+        'Cobrança',
+        'Pagamento a Fornecedores',
+        'Pagamento de Tributos',
+        'Pagamento de Salários',
+        'Extrato',
+        'Código de Barras / Arrecadação',
+    ];
+    opcoes.forEach(opcao => {
+        const regex = new RegExp(`\\( \\) ${escapeRegExp(opcao)}`, 'g');
+        if (opcoesSelecionadas.includes(opcao)) {
+            html = html.replace(regex, `( X ) ${opcao}`);
+        }
+    });
+    return html;
+}
+function marcarCnabSelecionado(html, carta) {
+    // Supondo que carta.tipoCnab?.descricao traga algo como '240' ou '400'
+    const cnabSelecionado = carta.tipoCnab?.descricao || '';
+    const cnabs = ['240', '400', '444'];
+    cnabs.forEach(cnab => {
+        const regex = new RegExp(`\\( \\) ${escapeRegExp(cnab)}`, 'g');
+        if (cnabSelecionado === cnab) {
+            html = html.replace(regex, `( X ) ${cnab}`);
+        }
+    });
+    return html;
+}
+function escapeRegExp(string) {
+    return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 }

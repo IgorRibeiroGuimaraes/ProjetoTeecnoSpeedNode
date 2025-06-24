@@ -1,4 +1,5 @@
 "use strict";
+// src/services/generateVanLetterPDFService.ts
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.generateVanLetterPDFHandler = generateVanLetterPDFHandler;
 const generateVanLetterPDFService_1 = require("../services/generateVanLetterPDFService");
@@ -11,9 +12,8 @@ const letterTemplateService_1 = require("../services/letterTemplateService");
  * 2. Fazer o upload do PDF gerado para o Supabase.
  * 3. Retornar a URL assinada do PDF gerado.
  *
- * @param req - Objeto da requisição Fastify.
- * @param rep - Objeto da resposta Fastify.
- * @returns Resposta HTTP com os dados da carta criada ou mensagem de erro.
+ * @param cartaId - ID da carta a ser processada.
+ * @returns URL assinada do PDF ou lança erro em caso de falha.
  */
 async function generateVanLetterPDFHandler(cartaId) {
     console.log('Iniciando geração do PDF para cartaId:', cartaId);

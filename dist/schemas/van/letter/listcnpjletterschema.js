@@ -1,6 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.listcnpjletterschema = void 0;
+exports.listLetterCNPJSchema = exports.listcnpjletterschema = void 0;
+const zod_1 = require("zod");
 exports.listcnpjletterschema = {
     summary: 'Listar serviços por CNPJ',
     description: 'Retorna a lista de cartas, através do CNPJ, Requer autenticação.',
@@ -46,3 +47,13 @@ exports.listcnpjletterschema = {
         }
     }
 };
+exports.listLetterCNPJSchema = zod_1.z.object({
+    query: zod_1.z.object({
+        cnpj: zod_1.z
+            .string({
+            required_error: 'O CNPJ é obrigatório.',
+            invalid_type_error: 'O CNPJ deve ser uma string.',
+        })
+            .regex(/^\d{14}$/, 'O CNPJ deve conter exatamente 14 números.')
+    })
+});

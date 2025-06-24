@@ -31,7 +31,7 @@ app.register(cookie_1.default, {
     parseOptions: {
         httpOnly: true, // Cookies HTTP-only
         secure: process.env.NODE_ENV === "production", // Apenas HTTPS em produção
-        sameSite: "strict", // Proteção contra CSRF
+        sameSite: "none", // Permite cookies cross-site
     },
 });
 // Configuração do Swagger (Documentação da API)
