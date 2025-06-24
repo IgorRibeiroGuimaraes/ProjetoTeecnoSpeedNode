@@ -14,6 +14,6 @@ export function definirCookie(rep: FastifyReply, nome: string, valor: string, ma
     secure: true,
     sameSite: 'none',
     path: '/',
-    maxAge,
+    maxAge: 60 * 60,
   });
 }
