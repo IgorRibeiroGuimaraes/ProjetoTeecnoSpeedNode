@@ -41,3 +41,5 @@ dump.sql
 
 
 *.env
+
+dist/
