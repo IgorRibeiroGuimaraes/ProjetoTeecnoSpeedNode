@@ -34,7 +34,9 @@ export async function getCartaById(cartaId: number) {
  * @throws Lança um erro caso ocorra algum problema durante a geração do PDF.
  */
 export async function generatePDF(html: string): Promise<Buffer> {
-  const browser = await puppeteer.launch();
+  const browser = await puppeteer.launch({
+    args: ['--no-sandbox', '--disable-setuid-sandbox'],
+  });
   const page = await browser.newPage();
   await page.setContent(html, { waitUntil: 'load' });
 
