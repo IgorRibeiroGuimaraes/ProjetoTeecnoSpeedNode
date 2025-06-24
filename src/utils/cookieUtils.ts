@@ -11,7 +11,7 @@ export function definirCookie(rep: FastifyReply, nome: string, valor: string, ma
   rep.setCookie(nome, valor, {
     httpOnly: true,
     secure: process.env.NODE_ENV === 'production', // Apenas em HTTPS em produção
-    sameSite: 'strict', // Proteção contra CSRF
+    sameSite: 'none', // Proteção contra CSRF
     path: '/',
     maxAge, // Tempo de expiração em segundos
   });
