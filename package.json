@@ -1,32 +1,52 @@
 {
   "name": "projeto-tecno",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "description": "Projeto TecnoSpeed",
+  "main": "dist/server.js",
   "scripts": {
-    "dev": "tsx watch src/server.ts"
+    "dev": "tsx watch src/server.ts",
+    "build": "tsc && npm run copy-templates",
+    "copy-templates": "cp -r src/templateLetter dist/",
+    "start": "node dist/server.js",
+    "generate": "npx prisma generate",
+    "postinstall": "puppeteer install"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "packageManager": "pnpm@10.5.2",
   "dependencies": {
+    "@fastify/cookie": "^11.0.2",
+    "@fastify/cors": "^11.0.1",
     "@fastify/swagger": "^9.4.2",
     "@fastify/swagger-ui": "^5.2.2",
-    "@prisma/client": "^6.4.1",
+    "@prisma/client": "^6.8.2",
+    "@supabase/supabase-js": "^2.50.0",
+    "axios": "^1.10.0",
     "dotenv": "^16.4.7",
-    "fastify": "^5.2.1",
+    "fastify": "^5.3.0",
+    "form-data": "^4.0.3",
+    "json-schema-to-ts": "^3.1.1",
+    "jsonwebtoken": "^9.0.2",
+    "luxon": "^3.6.1",
     "pg": "^8.13.3",
-    "projeto-tecno": "file:",
-    "Projeto-Tecno": "file:",
-    "ProjetoTecno": "file:",
-    "zod": "^3.24.2"
+    "puppeteer": "^24.9.0",
+    "zod": "^3.24.2",
+    "zod-to-json-schema": "^3.24.5"
   },
   "devDependencies": {
+    "@types/form-data": "^2.5.2",
+    "@types/jsonwebtoken": "^9.0.9",
+    "@types/luxon": "^3.6.2",
     "@types/node": "^22.13.8",
-    "prisma": "^6.4.1",
+    "@types/swagger-schema-official": "^2.0.25",
+    "cpx": "^1.5.0",
+    "prisma": "^6.8.2",
     "ts-node": "^10.9.2",
     "tsx": "^4.19.3",
     "typescript": "^5.8.2"
+  },
+  "prisma": {
+    "schema": "prisma/schema.prisma"
   }
 }
