@@ -27,6 +27,6 @@ export async function buscarCartaPorCnpjService(cnpj: string) {
     createdAt: carta.createdAt,
     tipoCnab: carta.tipoCnab?.descricao,
     banco: carta.banco?.nome,
-    status: carta.status[0]?.status?.descricao || null, // status mais recente
+    status: carta.status[0]?.status?.descricao || null, 
   };
 }

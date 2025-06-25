@@ -27,6 +27,7 @@ export const listcnpjletterschema = {
           produto: { type: 'string', example: 'Cobrança' },
           banco: { type: 'string', example: 'Itaú' },
           status: { type: 'string', example: 'Aberta', description: 'Descrição do status mais recente da carta' }, // Adicionado campo status
+          pdfUrl: { type: 'string', example: 'https://csloutqdlavdntlpkyvn.supabase.co/storage/v1/object/public/cartas/1.pdf', description: 'URL do arquivo no Supabase' }
         }
       }
     },
