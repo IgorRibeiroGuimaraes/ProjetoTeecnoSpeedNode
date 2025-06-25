@@ -5,7 +5,7 @@ import { verificarAutenticacao } from '../middlewares/authMiddleware';
 
 
 export async function updateAndGenerateVanLettrePDF(fastify: FastifyInstance) {
-  fastify.put('/cartas/generatepdf', {
+  fastify.put('/letter/generatepdf', {
     preHandler: verificarAutenticacao,
     schema: updateAndGenearateLetterServicPDFSchema,
   }, updateAndGenerateLetterServicePDFHandler);

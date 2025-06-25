@@ -5,7 +5,7 @@ import { listcnpjletterschema } from '../schemas/van/letter/listcnpjletterschema
 
 
 export async function cartaRoutes(fastify: FastifyInstance) {
-  fastify.get('/list-cartas', {
+  fastify.get('/list-letter', {
     preHandler: verificarAutenticacao,
     schema: listcnpjletterschema,
   }, getLetterController);

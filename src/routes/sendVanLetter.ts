@@ -14,7 +14,7 @@ export async function sendVanLetterRoutes(fastify: FastifyInstance) {
   fastify.post<{
     Body: SendVanLetterBody; // Define o tipo do corpo da requisição
   }>(
-    '/cartas/van/enviar',
+    '/letter/van/send',
     {
       schema: sendVanLetterSchema,
       preHandler: verificarAutenticacao, 

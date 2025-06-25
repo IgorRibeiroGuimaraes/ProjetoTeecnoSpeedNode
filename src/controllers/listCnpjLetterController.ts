@@ -28,15 +28,16 @@ export async function getLetterController(request: FastifyRequest, reply: Fastif
       return reply.status(500).send({ message: 'Não foi possível gerar a URL do arquivo.' });
     }
 
-    return reply.send({
+    return reply.send([{
       id_da_carta: carta.id,
       banco: carta.banco,
       produto: carta.produto,
       tipoCnab: carta.tipoCnab,
       servico: carta.servicoNome,
+      status: carta.status,
       pdfUrl: signedUrl,
       dataCriacao: carta.dataCriacao,
-    });
+    }]);
   } catch (error: any) {
     if (error.name === 'ZodError') {
       return reply.status(400).send({

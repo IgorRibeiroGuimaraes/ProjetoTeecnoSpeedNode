@@ -26,6 +26,7 @@ export const listcnpjletterschema = {
           tipoCnab: { type: 'string', example: 'CNAB240' },
           produto: { type: 'string', example: 'Cobrança' },
           banco: { type: 'string', example: 'Itaú' },
+          status: { type: 'string', example: 'Aberta', description: 'Descrição do status mais recente da carta' }, // Adicionado campo status
         }
       }
     },
@@ -45,7 +46,6 @@ export const listcnpjletterschema = {
     }
   }
 };
-
 
 export const listLetterCNPJSchema = z.object({
   query: z.object({

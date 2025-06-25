@@ -2,7 +2,7 @@ import {
   vanResponseExample,
   vanErrorValidationExample,
   vanErrorInternalExample,
-} from '../../../fixtures/vanExamples';
+} from '../../../fixtures/vanExamples'
 
 /**
  * Esquema de resposta para a rota de criação de uma Carta VAN.
@@ -34,6 +34,13 @@ export const vanResponseSchema = {
           email: { type: 'string' }, // E-mail do responsável
         },
       },
+      responsavelTecnoSpeed: { // Adicionado bloco responsavelTecnoSpeed
+        type: 'object',
+        properties: {
+          respTecno: { type: 'string', description: 'Responsável TecnoSpeed' },
+          emailTecno: { type: 'string', description: 'E-mail do responsável TecnoSpeed' },
+        },
+      },
       banco: {
         type: 'object',
         properties: {
@@ -42,6 +49,8 @@ export const vanResponseSchema = {
           agenciaDV: { type: 'string' }, // Dígito verificador da agência
           conta: { type: 'number' }, // Número da conta
           contaDV: { type: 'number' }, // Dígito verificador da conta
+          cidadebanco: { type: 'string' }, // Cidade da agência bancária
+          ufBanco: { type: 'string' }, // UF da agência bancária
           convenio: { type: 'string' }, // Número do convênio
           cnab: { type: 'string' }, // Nome do tipo de CNAB
           gerente: {
@@ -51,6 +60,11 @@ export const vanResponseSchema = {
               telefone: { type: 'string' }, // Telefone do gerente
               email: { type: 'string' }, // E-mail do gerente
             },
+          },
+          preferenciaContato: {
+            type: 'string',
+            description: 'Preferência de contato do banco',
+            example: 'E-mail'
           },
         },
       },
@@ -90,7 +104,7 @@ export const vanResponseSchema = {
     example: vanErrorValidationExample, // Exemplo de erro de validação
   },
 
-  /**
+  /** 
    * Resposta 500 - Erro interno do servidor.
    * Esta resposta é retornada quando ocorre um erro inesperado no servidor.
    */

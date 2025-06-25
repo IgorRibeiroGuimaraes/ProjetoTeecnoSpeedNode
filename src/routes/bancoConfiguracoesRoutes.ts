@@ -5,7 +5,7 @@ import { verificarAutenticacao } from "../middlewares/authMiddleware";
 
 export async function bancoConfiguracoesRoutes(app: FastifyInstance) {
   app.get(
-    "/bancos-configuracoes",
+    "/banks-settings",
     {
       preHandler: verificarAutenticacao,
       schema: bancoConfiguracoesSchema,

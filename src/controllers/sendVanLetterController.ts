@@ -40,8 +40,11 @@ export async function sendVanLetterController(
 
     const cartasAbertas = await contarCartasAbertasPorCarta(cartaId, statusAberta.id);
     if (cartasAbertas >= 5) {
+      // Atualiza o status da carta para 2 (fechada)
+      await associarStatusAberta(cartaId, 2);
+
       return rep.status(400).send({
-        erro: 'Limite de 5 validações atingido para esta carta. Aguarde antes de tentar novamente.',
+        erro: 'Limite de 5 validações atingido para esta carta. Status atualizado para 2.',
       });
     }
 

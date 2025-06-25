@@ -24,7 +24,6 @@ export async function createCartaVan(data: any) {
     },
   });
 
-
   if (!configuracaoValida) {
     throw new Error(
       `O banco com ID ${data.banco.bancoId} não suporta o CNAB com ID ${data.banco.tipoCnabId} e o Produto com ID ${produtoId}.`
@@ -46,7 +45,6 @@ export async function createCartaVan(data: any) {
     );
   }
 
-
   const vanLetter = await prisma.cartaVan.create({
     data: {
       cnpjEmitente: data.emitente.cnpj,
@@ -66,6 +64,11 @@ export async function createCartaVan(data: any) {
       nomeGerente: data.banco.gerente.nome,
       telefoneGerente: formatPhone(data.banco.gerente.telefone),
       emailGerente: data.banco.gerente.email,
+      preferenciaContato: data.banco.preferenciaContato,
+      respTecnoSpeed: data.responsavelTecnoSpeed.respTecno,
+      emailTecnoSpeed: data.responsavelTecnoSpeed.emailTecno,
+      cidadebanco: data.banco.cidadebanco, // novo campo
+      ufBanco: data.banco.ufBanco,         // novo campo
       createdAt: nowInUTC,
     },
     include: {
@@ -74,9 +77,10 @@ export async function createCartaVan(data: any) {
       produto: true, // Inclui os detalhes do produto na resposta
     },
   });
+  
 
   return {
-    id:vanLetter.id,
+    id: vanLetter.id,
     emitente: {
       cnpj: vanLetter.cnpjEmitente,
       razaoSocial: vanLetter.razaoSocial,
@@ -87,20 +91,28 @@ export async function createCartaVan(data: any) {
       telefone: vanLetter.telefone,
       email: vanLetter.email,
     },
+    responsavelTecnoSpeed: {
+      respTecno: vanLetter.respTecnoSpeed,
+      emailTecno: vanLetter.emailTecnoSpeed,
+    },
     banco: {
+      bancoId: vanLetter.bancoId,
       nome: vanLetter.banco.nome,
       agencia: vanLetter.agencia,
       agenciaDV: vanLetter.agenciaDV,
       conta: vanLetter.conta,
       contaDV: vanLetter.contaDV,
+      cidadebanco: vanLetter.cidadebanco, 
+      ufBanco: vanLetter.ufBanco,
       convenio: vanLetter.convenio,
       cnab: vanLetter.tipoCnab.descricao,
       gerente: {
         nome: vanLetter.nomeGerente,
         telefone: vanLetter.telefoneGerente,
         email: vanLetter.emailGerente,
-      },
+      },       
     },
+    preferenciaContato: vanLetter.preferenciaContato, // Adicionado na resposta
     produto: {
       id: vanLetter.produto.id,
       nome: vanLetter.produto.nome,

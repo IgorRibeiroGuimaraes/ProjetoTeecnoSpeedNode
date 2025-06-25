@@ -1,4 +1,3 @@
-import { create } from 'domain';
 import { prisma } from '../lib/prisma';
 
 export async function buscarCartaPorCnpjService(cnpj: string) {
@@ -6,9 +5,14 @@ export async function buscarCartaPorCnpjService(cnpj: string) {
     where: { cnpjEmitente: cnpj, servicoId: { not: null } },
     include: { 
       produto: true, 
-      servico: true ,
+      servico: true,
       tipoCnab: true,
       banco: true,
+      status: {
+        orderBy: { createdAt: 'desc' },
+        take: 1, // pega o status mais recente
+        include: { status: true }
+      }
     },
     orderBy: { createdAt: 'desc' } // Busca a carta mais recente
   });
@@ -23,5 +27,6 @@ export async function buscarCartaPorCnpjService(cnpj: string) {
     createdAt: carta.createdAt,
     tipoCnab: carta.tipoCnab?.descricao,
     banco: carta.banco?.nome,
+    status: carta.status[0]?.status?.descricao || null, // status mais recente
   };
 }
